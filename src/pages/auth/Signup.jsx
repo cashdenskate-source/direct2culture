@@ -6,7 +6,7 @@ import { signUpCustomer } from '../../lib/auth.js';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirm: '', userType: 'fan' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirm: '', userType: '' });
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState('');
   const [state, setState] = useState({ status: 'idle', message: '' });
@@ -32,6 +32,7 @@ export default function Signup() {
   async function onSubmit(e) {
     e.preventDefault();
     if (!form.name.trim()) return setState({ status: 'error', message: 'Name required.' });
+    if (!form.userType) return setState({ status: 'error', message: 'Pick what you are.' });
     if (form.password.length < 8) return setState({ status: 'error', message: 'Password must be at least 8 characters.' });
     if (form.password !== form.confirm) return setState({ status: 'error', message: 'Passwords do not match.' });
 
@@ -77,9 +78,9 @@ export default function Signup() {
             <input type="email" required value={form.email} onChange={(e) => update('email', e.target.value)} className="field" placeholder="you@email.com" />
           </div>
           <div>
-            <label className="field-label">I am a…</label>
+            <label className="field-label">I am a… <span className="text-red-500 normal-case">required</span></label>
             <div className="grid grid-cols-3 gap-2">
-              {['artist', 'producer', 'model', 'brand', 'fan'].map((t) => (
+              {['artist', 'producer', 'dj', 'model', 'influencer', 'photographer', 'director', 'editor', 'brand', 'fan'].map((t) => (
                 <button
                   type="button"
                   key={t}

@@ -111,7 +111,7 @@ export default function Profile() {
         </Field>
         <Field label="I am a…">
           <div className="grid grid-cols-3 gap-2">
-            {['artist', 'producer', 'model', 'brand', 'fan'].map((t) => (
+            {['artist', 'producer', 'dj', 'model', 'influencer', 'photographer', 'director', 'editor', 'brand', 'fan'].map((t) => (
               <button type="button" key={t} onClick={() => update('userType', t)}
                 className={`border px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] transition-colors ${
                   form.userType === t ? 'border-ink bg-ink text-bone' : 'border-ink/30 text-ink hover:border-ink'
@@ -128,7 +128,7 @@ export default function Profile() {
           <textarea className="field min-h-[120px] resize-none" rows={4} value={form.bio} onChange={(e) => update('bio', e.target.value)} placeholder="One paragraph. What you do, where you are going." />
         </Field>
 
-        {(form.userType === 'artist' || form.userType === 'producer') && (
+        {['artist', 'producer', 'dj'].includes(form.userType) && (
           <>
             <div className="sm:col-span-2 mt-4 border-t border-ink/10 pt-6">
               <p className="eyebrow">Music Links</p>
