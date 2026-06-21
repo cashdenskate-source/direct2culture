@@ -6,6 +6,7 @@ import SEO from '../../components/SEO.jsx';
 import StockChart from '../../components/market/StockChart.jsx';
 import ChangeBadge from '../../components/market/ChangeBadge.jsx';
 import LiveNumber from '../../components/market/LiveNumber.jsx';
+import WatchButton from '../../components/market/WatchButton.jsx';
 import { db, hasFirebaseConfig } from '../../lib/firebase.js';
 import { getSongByTicker, formatNum, trendStatus } from '../../lib/market.js';
 
@@ -73,6 +74,17 @@ export default function SongDetail() {
           }
         />
 
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <WatchButton
+            kind="song"
+            id={song.id}
+            ticker={song.ticker}
+            title={song.title}
+            subtitle={song.artistName}
+            imageURL={song.coverURL}
+            href={`/market/song/${song.ticker}`}
+          />
+        </div>
         <StreamingLinks song={song} />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-10">

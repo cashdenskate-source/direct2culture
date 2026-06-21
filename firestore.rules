@@ -33,6 +33,11 @@ service cloud.firestore {
         || isAdmin()
       );
       allow delete: if isAdmin();
+
+      // Per-user watchlist — owner only
+      match /watchlist/{itemId} {
+        allow read, write: if signedIn() && uid() == userId;
+      }
     }
 
     // SUBMISSIONS — owner read/write own; anonymous can create public-form submissions; admin/editor full.

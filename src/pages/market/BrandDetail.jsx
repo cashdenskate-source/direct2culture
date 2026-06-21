@@ -7,6 +7,7 @@ import MarketTabs from '../../components/market/MarketTabs.jsx';
 import StockChart from '../../components/market/StockChart.jsx';
 import ChangeBadge from '../../components/market/ChangeBadge.jsx';
 import LiveNumber from '../../components/market/LiveNumber.jsx';
+import WatchButton from '../../components/market/WatchButton.jsx';
 import { db, hasFirebaseConfig } from '../../lib/firebase.js';
 import { getBrandByTicker, subscribeBrandHistory } from '../../lib/brands.js';
 import { formatNum } from '../../lib/market.js';
@@ -61,6 +62,17 @@ export default function BrandDetail() {
           }
         />
 
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <WatchButton
+            kind="brand"
+            id={brand.id}
+            ticker={brand.ticker}
+            title={brand.name}
+            subtitle={brand.category || 'brand'}
+            imageURL={brand.logoURL}
+            href={`/market/brand/${brand.ticker}`}
+          />
+        </div>
         <SocialLinks brand={brand} />
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-10">

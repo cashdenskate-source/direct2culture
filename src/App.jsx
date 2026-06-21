@@ -10,6 +10,10 @@ import Events from './pages/Events.jsx';
 import Submit from './pages/Submit.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
+import Pricing from './pages/Pricing.jsx';
+import Newsletter from './pages/Newsletter.jsx';
+import Terms from './pages/Terms.jsx';
+import Privacy from './pages/Privacy.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -46,6 +50,7 @@ import Brands from './pages/market/Brands.jsx';
 import BrandDetail from './pages/market/BrandDetail.jsx';
 import Art from './pages/market/Art.jsx';
 import SubmitRelease from './pages/dashboard/SubmitRelease.jsx';
+import WatchlistPage from './pages/dashboard/Watchlist.jsx';
 import AdminReleases from './pages/admin/AdminReleases.jsx';
 import AdminBrands from './pages/admin/AdminBrands.jsx';
 
@@ -84,6 +89,10 @@ export default function App() {
         <Route path="/submit" element={<PublicShell><Submit /></PublicShell>} />
         <Route path="/about" element={<PublicShell><About /></PublicShell>} />
         <Route path="/contact" element={<PublicShell><Contact /></PublicShell>} />
+        <Route path="/pricing" element={<PublicShell><Pricing /></PublicShell>} />
+        <Route path="/newsletter" element={<PublicShell><Newsletter /></PublicShell>} />
+        <Route path="/terms" element={<PublicShell><Terms /></PublicShell>} />
+        <Route path="/privacy" element={<PublicShell><Privacy /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
@@ -116,6 +125,7 @@ export default function App() {
           <Route path="interview-request" element={<TypedList type="interview" eyebrow="Customer / Interview" title="Interview requests." kicker="Pitch a person, a profile, or yourself." ctaLabel="New Request" />} />
           <Route path="profile" element={<Profile />} />
           <Route path="submit-release" element={<SubmitRelease />} />
+          <Route path="watchlist" element={<WatchlistPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
 

@@ -8,6 +8,8 @@ import {
 import { doc, setDoc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { auth, db, storage } from './firebase.js';
+import { notifyNewSignup } from './notifications.js';
+import { sendWebhook } from './webhooks.js';
 
 export async function signUpCustomer({ email, password, name, phone, photoFile, userType }) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -32,6 +34,10 @@ export async function signUpCustomer({ email, password, name, phone, photoFile, 
     createdAt: serverTimestamp(),
     newsletterOptIn: true,
   });
+  // Fire-and-forget notification + webhook (stubs by default)
+  const profile = { uid: cred.user.uid, email, name, userType };
+  notifyNewSignup(profile).catch(() => {});
+  sendWebhook('new_signup', profile).catch(() => {});
   return { user: cred.user, role: 'customer' };
 }
 

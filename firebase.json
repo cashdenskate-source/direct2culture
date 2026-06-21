@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "point-to-end-agency",
     "public": "dist",
     "ignore": [
       "firebase.json",

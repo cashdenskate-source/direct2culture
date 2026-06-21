@@ -11,6 +11,7 @@ const links = [
   { to: '/events', label: 'Events' },
   { to: '/market', label: 'Market' },
   { to: '/submit', label: 'Submit' },
+  { to: '/pricing', label: 'Get Featured' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];

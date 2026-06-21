@@ -38,6 +38,9 @@ export default function Footer() {
               <li><Link to="/drops" className="hover:text-bone text-bone/70">Drops</Link></li>
               <li><Link to="/events" className="hover:text-bone text-bone/70">Events</Link></li>
               <li><Link to="/submit" className="hover:text-bone text-bone/70">Submit Your Brand</Link></li>
+              <li><Link to="/market" className="hover:text-bone text-bone/70">Market</Link></li>
+              <li><Link to="/pricing" className="hover:text-bone text-bone/70">Get Featured</Link></li>
+              <li><Link to="/newsletter" className="hover:text-bone text-bone/70">Newsletter</Link></li>
               <li><Link to="/contact" className="hover:text-bone text-bone/70">Contact</Link></li>
             </ul>
           </div>
@@ -80,9 +83,13 @@ export default function Footer() {
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50">
             © {new Date().getFullYear()} Direct2Culture · All rights reserved
           </p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50">
-            Built from the source · direct2culture.com
-          </p>
+          <div className="flex flex-wrap items-center gap-5">
+            <Link to="/terms" className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50 hover:text-bone">Terms</Link>
+            <Link to="/privacy" className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50 hover:text-bone">Privacy</Link>
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50">
+              direct2culture.com
+            </p>
+          </div>
         </div>
       </div>
     </footer>

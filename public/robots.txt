@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://direct2culture.com/sitemap.xml
