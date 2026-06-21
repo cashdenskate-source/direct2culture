@@ -44,6 +44,7 @@ import ArtistDetail from './pages/market/ArtistDetail.jsx';
 import Upcoming from './pages/market/Upcoming.jsx';
 import Brands from './pages/market/Brands.jsx';
 import BrandDetail from './pages/market/BrandDetail.jsx';
+import Art from './pages/market/Art.jsx';
 import SubmitRelease from './pages/dashboard/SubmitRelease.jsx';
 import AdminReleases from './pages/admin/AdminReleases.jsx';
 import AdminBrands from './pages/admin/AdminBrands.jsx';
@@ -91,6 +92,7 @@ export default function App() {
         <Route path="/market/upcoming" element={<PublicShell><Upcoming /></PublicShell>} />
         <Route path="/market/brands" element={<PublicShell><Brands /></PublicShell>} />
         <Route path="/market/brand/:ticker" element={<PublicShell><BrandDetail /></PublicShell>} />
+        <Route path="/market/art" element={<PublicShell><Art /></PublicShell>} />
 
         {/* Auth */}
         <Route path="/login" element={<RedirectIfAuthed><Login /></RedirectIfAuthed>} />

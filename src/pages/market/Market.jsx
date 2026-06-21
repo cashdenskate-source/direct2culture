@@ -6,6 +6,7 @@ import SongCard from '../../components/market/SongCard.jsx';
 import ArtistCard from '../../components/market/ArtistCard.jsx';
 import TickerTape from '../../components/market/TickerTape.jsx';
 import MarketTabs from '../../components/market/MarketTabs.jsx';
+import MarketIndex from '../../components/market/MarketIndex.jsx';
 import { subscribeSongs, subscribeArtists } from '../../lib/market.js';
 import { subscribeApprovedUpcoming } from '../../lib/releases.js';
 import Countdown from '../../components/market/Countdown.jsx';
@@ -56,6 +57,15 @@ export default function Market() {
           title="Culture Stock Exchange."
           kicker="Songs and artists, charted like stocks. Streams. Trends. Movement."
         />
+
+        <div className="mt-10">
+          <MarketIndex
+            title="D2C Music Index"
+            subtitle="aggregate streams across all listed songs"
+            collectionName="streamHistory"
+            valueField="streams"
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12">
           <Section className="lg:col-span-2" title="Top Streaming Songs" subtitle={`${topStreaming.length} charted`}>

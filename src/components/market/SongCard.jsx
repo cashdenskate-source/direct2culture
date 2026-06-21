@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import ChangeBadge from './ChangeBadge.jsx';
-import { formatNum } from '../../lib/market.js';
+import LivePulse from './LivePulse.jsx';
 
 export default function SongCard({ song, rank }) {
   return (
@@ -29,7 +29,9 @@ export default function SongCard({ song, rank }) {
         </p>
       </div>
       <div className="text-right shrink-0">
-        <p className="font-sans font-bold tabular-nums">{formatNum(song.totalStreams)}</p>
+        <p className="font-sans font-bold tabular-nums">
+          <LivePulse value={song.totalStreams} rate={Math.max(30, (song.streamsToday || 80) * 0.6)} intervalMs={2200} />
+        </p>
         <ChangeBadge value={song.change7d} />
       </div>
     </Link>

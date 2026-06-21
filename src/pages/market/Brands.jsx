@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import PageHeader from '../../components/PageHeader.jsx';
 import SEO from '../../components/SEO.jsx';
 import MarketTabs from '../../components/market/MarketTabs.jsx';
+import MarketIndex from '../../components/market/MarketIndex.jsx';
 import TickerTape from '../../components/market/TickerTape.jsx';
 import BrandStockCard from '../../components/market/BrandStockCard.jsx';
 import { subscribeBrands } from '../../lib/brands.js';
@@ -43,6 +44,15 @@ export default function Brands() {
           title="Brand Stock Exchange."
           kicker="Clothing brands, charted like stocks. Followers. Drops. Growth. The wave before it hits."
         />
+
+        <div className="mt-10">
+          <MarketIndex
+            title="D2C Brand Index"
+            subtitle="aggregate followers across all listed brands"
+            collectionName="brandHistory"
+            valueField="followers"
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12">
           <Section className="lg:col-span-2" title="Top Brands" subtitle={`${ranked.length} listed`}>

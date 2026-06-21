@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import ChangeBadge from './ChangeBadge.jsx';
-import { formatNum } from '../../lib/market.js';
+import LivePulse from './LivePulse.jsx';
 
 export default function TickerTape({ songs = [] }) {
   if (!songs.length) return null;
@@ -16,7 +16,7 @@ export default function TickerTape({ songs = [] }) {
             className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] hover:text-white"
           >
             <span className="font-bold">${s.ticker}</span>
-            <span className="text-bone/60">{formatNum(s.totalStreams)}</span>
+            <span className="text-bone/60"><LivePulse value={s.totalStreams} rate={Math.max(20, (s.streamsToday || 60) * 0.5)} intervalMs={1800} /></span>
             <ChangeBadge value={s.change7d} />
             <span className="text-bone/30 ml-4">·</span>
           </Link>

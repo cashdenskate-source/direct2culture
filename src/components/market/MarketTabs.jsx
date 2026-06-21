@@ -1,29 +1,71 @@
-import { NavLink } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 
-const tabs = [
-  { to: '/market', label: 'Music', end: true },
+const options = [
+  { to: '/market', label: 'Music' },
   { to: '/market/brands', label: 'Brands' },
-  { to: '/market/upcoming', label: 'Upcoming Drops' },
+  { to: '/market/art', label: 'Art' },
 ];
 
+function activeOption(pathname) {
+  if (pathname.startsWith('/market/brands') || pathname.startsWith('/market/brand/')) return options[1];
+  if (pathname.startsWith('/market/art')) return options[2];
+  return options[0];
+}
+
 export default function MarketTabs() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const current = activeOption(location.pathname);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [open]);
+
   return (
     <nav className="border-b border-ink/10 mb-8">
-      <div className="container-edge flex gap-6 overflow-x-auto">
-        {tabs.map((t) => (
-          <NavLink
-            key={t.to}
-            to={t.to}
-            end={t.end}
-            className={({ isActive }) =>
-              `whitespace-nowrap border-b-2 pb-3 pt-1 font-mono text-[11px] uppercase tracking-[0.25em] transition-colors ${
-                isActive ? 'border-ink text-ink' : 'border-transparent text-ash hover:text-ink'
-              }`
-            }
+      <div className="container-edge flex items-center justify-between py-3 gap-3 flex-wrap">
+        <div ref={ref} className="relative">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="flex items-center gap-3 border border-ink px-4 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
+            aria-haspopup="listbox"
+            aria-expanded={open}
           >
-            {t.label}
-          </NavLink>
-        ))}
+            <span className="opacity-60">Market /</span>
+            <span className="font-bold">{current.label}</span>
+            <span className="opacity-60">▾</span>
+          </button>
+          {open && (
+            <ul className="absolute left-0 top-full mt-1 z-50 min-w-[240px] border border-ink bg-bone shadow-[0_10px_30px_-12px_rgba(0,0,0,0.25)]">
+              {options.map((o) => (
+                <li key={o.to}>
+                  <button
+                    onClick={() => { setOpen(false); navigate(o.to); }}
+                    className={`flex w-full items-center justify-between px-4 py-3 font-mono text-[11px] uppercase tracking-[0.25em] transition-colors ${
+                      current.to === o.to ? 'bg-ink text-bone' : 'text-ink hover:bg-ink hover:text-bone'
+                    }`}
+                  >
+                    <span>{o.label}</span>
+                    <span className="opacity-60">→</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <Link
+          to="/market/upcoming"
+          className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink"
+        >
+          Upcoming Drops →
+        </Link>
       </div>
     </nav>
   );

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import ChangeBadge from './ChangeBadge.jsx';
-import { formatNum } from '../../lib/market.js';
+import LivePulse from './LivePulse.jsx';
 
 export default function BrandStockCard({ brand, rank }) {
   return (
@@ -29,7 +29,9 @@ export default function BrandStockCard({ brand, rank }) {
         </p>
       </div>
       <div className="text-right shrink-0">
-        <p className="font-sans font-bold tabular-nums">{formatNum((brand.followersIG || 0) + (brand.followersTT || 0))}</p>
+        <p className="font-sans font-bold tabular-nums">
+          <LivePulse value={(brand.followersIG || 0) + (brand.followersTT || 0)} rate={Math.max(15, ((brand.followersIG || 0) + (brand.followersTT || 0)) * 0.002)} intervalMs={2200} />
+        </p>
         <ChangeBadge value={brand.growthPct} />
       </div>
     </Link>
