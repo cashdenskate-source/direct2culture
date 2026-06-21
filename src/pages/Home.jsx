@@ -7,6 +7,7 @@ import DropCard from '../components/DropCard.jsx';
 import EventCard from '../components/EventCard.jsx';
 import BrandCard from '../components/BrandCard.jsx';
 import NewsletterForm from '../components/NewsletterForm.jsx';
+import MarketPreview from '../components/MarketPreview.jsx';
 import SEO from '../components/SEO.jsx';
 import {
   cultureSignals,
@@ -103,6 +104,8 @@ export default function Home() {
           ))}
         </div>
       </Section>
+
+      <MarketPreview />
 
       <section className="bg-ink text-bone">
         <div className="container-edge py-20 lg:py-28">

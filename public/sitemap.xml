@@ -16,6 +16,15 @@
   <url><loc>https://direct2culture.com/market/brands</loc><priority>0.9</priority></url>
   <url><loc>https://direct2culture.com/market/art</loc><priority>0.7</priority></url>
   <url><loc>https://direct2culture.com/market/upcoming</loc><priority>0.8</priority></url>
+  <url><loc>https://direct2culture.com/market/djs</loc><priority>0.9</priority></url>
+  <url><loc>https://direct2culture.com/market/dj-usb</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/market/creatives</loc><priority>0.9</priority></url>
+  <url><loc>https://direct2culture.com/cities</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/cities/los-angeles</loc><priority>0.6</priority></url>
+  <url><loc>https://direct2culture.com/cities/atlanta</loc><priority>0.6</priority></url>
+  <url><loc>https://direct2culture.com/cities/miami</loc><priority>0.6</priority></url>
+  <url><loc>https://direct2culture.com/cities/new-york</loc><priority>0.6</priority></url>
+  <url><loc>https://direct2culture.com/cities/london</loc><priority>0.6</priority></url>
   <url><loc>https://direct2culture.com/login</loc><priority>0.3</priority></url>
   <url><loc>https://direct2culture.com/signup</loc><priority>0.5</priority></url>
 </urlset>

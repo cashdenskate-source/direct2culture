@@ -11,6 +11,8 @@ const navSections = [
       { to: '/admin/users', label: 'Sign-Ups' },
       { to: '/admin/calendar', label: 'Calendar' },
       { to: '/admin/market', label: 'Music Market' },
+      { to: '/admin/djs', label: 'DJ Market' },
+      { to: '/admin/creatives', label: 'Creative Market' },
       { to: '/admin/brands-market', label: 'Brand Market' },
       { to: '/admin/releases', label: 'Upcoming Drops' },
       { to: '/admin/submissions', label: 'Submissions' },

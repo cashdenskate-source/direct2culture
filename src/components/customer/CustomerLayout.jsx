@@ -11,6 +11,8 @@ const navItems = [
   { to: '/dashboard/events', label: 'My Events' },
   { to: '/dashboard/interview-request', label: 'Interview Request' },
   { to: '/dashboard/submit-release', label: 'Drop a Release' },
+  { to: '/dashboard/submit-dj', label: 'Apply as DJ' },
+  { to: '/dashboard/submit-creative', label: 'Apply as Creative' },
   { to: '/dashboard/watchlist', label: 'Watchlist' },
   { to: '/dashboard/profile', label: 'Profile' },
   { to: '/dashboard/settings', label: 'Settings' },

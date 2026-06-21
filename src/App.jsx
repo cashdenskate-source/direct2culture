@@ -14,6 +14,8 @@ import Pricing from './pages/Pricing.jsx';
 import Newsletter from './pages/Newsletter.jsx';
 import Terms from './pages/Terms.jsx';
 import Privacy from './pages/Privacy.jsx';
+import Cities from './pages/Cities.jsx';
+import CityDetail from './pages/CityDetail.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -49,6 +51,15 @@ import Upcoming from './pages/market/Upcoming.jsx';
 import Brands from './pages/market/Brands.jsx';
 import BrandDetail from './pages/market/BrandDetail.jsx';
 import Art from './pages/market/Art.jsx';
+import DJs from './pages/market/DJs.jsx';
+import DJDetail from './pages/market/DJDetail.jsx';
+import DJUSB from './pages/market/DJUSB.jsx';
+import SubmitDJ from './pages/dashboard/SubmitDJ.jsx';
+import AdminDJs from './pages/admin/AdminDJs.jsx';
+import Creatives from './pages/market/Creatives.jsx';
+import CreativeDetail from './pages/market/CreativeDetail.jsx';
+import SubmitCreative from './pages/dashboard/SubmitCreative.jsx';
+import AdminCreatives from './pages/admin/AdminCreatives.jsx';
 import SubmitRelease from './pages/dashboard/SubmitRelease.jsx';
 import WatchlistPage from './pages/dashboard/Watchlist.jsx';
 import AdminReleases from './pages/admin/AdminReleases.jsx';
@@ -93,6 +104,8 @@ export default function App() {
         <Route path="/newsletter" element={<PublicShell><Newsletter /></PublicShell>} />
         <Route path="/terms" element={<PublicShell><Terms /></PublicShell>} />
         <Route path="/privacy" element={<PublicShell><Privacy /></PublicShell>} />
+        <Route path="/cities" element={<PublicShell><Cities /></PublicShell>} />
+        <Route path="/cities/:slug" element={<PublicShell><CityDetail /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
@@ -102,6 +115,11 @@ export default function App() {
         <Route path="/market/brands" element={<PublicShell><Brands /></PublicShell>} />
         <Route path="/market/brand/:ticker" element={<PublicShell><BrandDetail /></PublicShell>} />
         <Route path="/market/art" element={<PublicShell><Art /></PublicShell>} />
+        <Route path="/market/djs" element={<PublicShell><DJs /></PublicShell>} />
+        <Route path="/market/dj/:handle" element={<PublicShell><DJDetail /></PublicShell>} />
+        <Route path="/market/dj-usb" element={<PublicShell><DJUSB /></PublicShell>} />
+        <Route path="/market/creatives" element={<PublicShell><Creatives /></PublicShell>} />
+        <Route path="/market/creative/:ticker" element={<PublicShell><CreativeDetail /></PublicShell>} />
 
         {/* Auth */}
         <Route path="/login" element={<RedirectIfAuthed><Login /></RedirectIfAuthed>} />
@@ -126,6 +144,8 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="submit-release" element={<SubmitRelease />} />
           <Route path="watchlist" element={<WatchlistPage />} />
+          <Route path="submit-dj" element={<SubmitDJ />} />
+          <Route path="submit-creative" element={<SubmitCreative />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
 
@@ -152,6 +172,8 @@ export default function App() {
           <Route path="calendar" element={<AdminCalendar />} />
           <Route path="market" element={<AdminMarket />} />
           <Route path="releases" element={<AdminReleases />} />
+          <Route path="djs" element={<AdminDJs />} />
+          <Route path="creatives" element={<AdminCreatives />} />
           <Route path="brands-market" element={<AdminBrands />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

@@ -188,7 +188,25 @@ export default function AdminMarket() {
               </div>
               <Input label="Genre" v={editing.data.genre} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, genre: v } }))} />
               <Input label="Release Date (YYYY-MM-DD)" v={editing.data.releaseDate} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, releaseDate: v } }))} />
-              <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em]">
+
+              <div className="border-t border-ink/10 pt-4">
+                <p className="eyebrow">Streaming links</p>
+              </div>
+              <Input label="Spotify URL" v={editing.data.spotifyURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, spotifyURL: v } }))} />
+              <Input label="Apple Music URL" v={editing.data.appleMusicURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, appleMusicURL: v } }))} />
+              <Input label="YouTube URL" v={editing.data.youtubeURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, youtubeURL: v } }))} />
+              <Input label="YouTube Video ID (for YT ⟳ refresh)" v={editing.data.youtubeVideoId} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, youtubeVideoId: v } }))} />
+              <Input label="SoundCloud URL" v={editing.data.soundcloudURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, soundcloudURL: v } }))} />
+              <Input label="Audiomack URL" v={editing.data.audiomackURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, audiomackURL: v } }))} />
+
+              <div className="grid grid-cols-2 gap-3 border-t border-ink/10 pt-4">
+                <Input label="Spotify Streams" type="number" v={editing.data.spotifyStreams} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, spotifyStreams: v } }))} />
+                <Input label="Apple Streams" type="number" v={editing.data.appleStreams} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, appleStreams: v } }))} />
+                <Input label="YouTube Views" type="number" v={editing.data.youtubeViews} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, youtubeViews: v } }))} />
+                <Input label="SoundCloud Plays" type="number" v={editing.data.soundcloudPlays} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, soundcloudPlays: v } }))} />
+              </div>
+
+              <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] pt-4 border-t border-ink/10">
                 <input type="checkbox" checked={!!editing.data.featured} onChange={(e) => setEditing((s) => ({ ...s, data: { ...s.data, featured: e.target.checked } }))} />
                 Direct2Culture Pick (featured)
               </label>

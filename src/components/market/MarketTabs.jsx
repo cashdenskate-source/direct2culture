@@ -3,13 +3,17 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 
 const options = [
   { to: '/market', label: 'Music' },
+  { to: '/market/djs', label: 'DJs' },
+  { to: '/market/creatives', label: 'Creatives' },
   { to: '/market/brands', label: 'Brands' },
   { to: '/market/art', label: 'Art' },
 ];
 
 function activeOption(pathname) {
-  if (pathname.startsWith('/market/brands') || pathname.startsWith('/market/brand/')) return options[1];
-  if (pathname.startsWith('/market/art')) return options[2];
+  if (pathname.startsWith('/market/djs') || pathname.startsWith('/market/dj/') || pathname.startsWith('/market/dj-usb')) return options[1];
+  if (pathname.startsWith('/market/creatives') || pathname.startsWith('/market/creative/')) return options[2];
+  if (pathname.startsWith('/market/brands') || pathname.startsWith('/market/brand/')) return options[3];
+  if (pathname.startsWith('/market/art')) return options[4];
   return options[0];
 }
 

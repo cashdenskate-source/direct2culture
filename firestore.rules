@@ -93,6 +93,10 @@ service cloud.firestore {
     match /streamHistory/{id}  { allow read: if true; allow write: if isEditor(); }
     match /brands/{id}         { allow read: if true; allow write: if isEditor(); }
     match /brandHistory/{id}   { allow read: if true; allow write: if isEditor(); }
+    match /djs/{id}            { allow read: if true; allow write: if isEditor(); }
+    match /djSpins/{id}        { allow read: if true; allow write: if isEditor(); }
+    match /creatives/{id}      { allow read: if true; allow write: if isEditor(); }
+    match /creativeHistory/{id} { allow read: if true; allow write: if isEditor(); }
 
     // RELEASES (pre-save drops) — public read; artist can create their own; admin/editor manage.
     match /releases/{id} {
