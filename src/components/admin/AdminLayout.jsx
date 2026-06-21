@@ -54,7 +54,7 @@ export default function AdminLayout() {
               <span className="block h-px w-5 bg-bone mb-1" />
               <span className="block h-px w-5 bg-bone" />
             </button>
-            <Link to="/admin/dashboard" className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <span className="block h-2 w-2 bg-bone" />
               <span className="font-sans text-base font-black tracking-tightest">D2C / ADMIN</span>
             </Link>
