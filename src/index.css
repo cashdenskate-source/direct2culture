@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    background: #f4f2ee;
+    color: #0a0a0a;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: #0a0a0a;
+    color: #f4f2ee;
+  }
+}
+
+@layer components {
+  .container-edge {
+    @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-[0.25em] text-ash;
+  }
+
+  .display-xl {
+    @apply font-sans font-black tracking-tightest leading-[0.88];
+    font-size: clamp(3rem, 9vw, 9rem);
+  }
+
+  .display-lg {
+    @apply font-sans font-black tracking-tightest leading-[0.9];
+    font-size: clamp(2.25rem, 6vw, 5.5rem);
+  }
+
+  .display-md {
+    @apply font-sans font-bold tracking-tighter leading-[0.95];
+    font-size: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 border border-ink px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-bone hover:bg-bone hover:text-ink;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-ink hover:bg-ink hover:text-bone;
+  }
+
+  .btn-invert {
+    @apply btn border-bone bg-bone text-ink hover:bg-transparent hover:text-bone;
+  }
+
+  .field {
+    @apply w-full border-b border-ink/30 bg-transparent py-3 font-sans text-base text-ink placeholder:text-ash/70 focus:border-ink focus:outline-none;
+  }
+
+  .field-label {
+    @apply mb-1 block font-mono text-[10px] uppercase tracking-[0.25em] text-ash;
+  }
+
+  .card {
+    @apply relative flex h-full flex-col border border-ink/15 bg-bone p-6 transition-all duration-500 hover:border-ink;
+  }
+
+  .ticker-track {
+    will-change: transform;
+  }
+
+  .image-frame {
+    @apply relative w-full overflow-hidden bg-ink;
+    aspect-ratio: 4 / 5;
+  }
+
+  .image-frame-wide {
+    @apply relative w-full overflow-hidden bg-ink;
+    aspect-ratio: 16 / 10;
+  }
+
+  .image-noise {
+    background-image: radial-gradient(rgba(244, 242, 238, 0.06) 1px, transparent 1px),
+      radial-gradient(rgba(244, 242, 238, 0.04) 1px, transparent 1px);
+    background-position: 0 0, 4px 4px;
+    background-size: 8px 8px;
+  }
+
+  .grid-lines {
+    background-image: linear-gradient(to right, rgba(10, 10, 10, 0.06) 1px, transparent 1px);
+    background-size: 80px 100%;
+  }
+}
+
+@layer utilities {
+  .hover-lift {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+}
