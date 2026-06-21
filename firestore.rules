@@ -82,10 +82,38 @@ service cloud.firestore {
     match /drops/{id}          { allow read: if true; allow write: if isEditor(); }
     match /events/{id}         { allow read: if true; allow write: if isEditor(); }
 
+    // CULTURE STOCK EXCHANGE — public read, admin/editor write.
+    match /songs/{id}          { allow read: if true; allow write: if isEditor(); }
+    match /artists/{id}        { allow read: if true; allow write: if isEditor(); }
+    match /streamHistory/{id}  { allow read: if true; allow write: if isEditor(); }
+    match /brands/{id}         { allow read: if true; allow write: if isEditor(); }
+    match /brandHistory/{id}   { allow read: if true; allow write: if isEditor(); }
+
+    // RELEASES (pre-save drops) — public read; artist can create their own; admin/editor manage.
+    match /releases/{id} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.artistUid == uid()
+                       && request.resource.data.status == 'pending';
+      allow update, delete: if isEditor() || (signedIn() && resource.data.artistUid == uid()
+                                              && resource.data.status in ['pending', 'rejected']);
+
+      // Pre-saves: any signed-in user can save their own
+      match /presaves/{userId} {
+        allow read: if isEditor() || (signedIn() && uid() == userId);
+        allow create, update: if signedIn() && uid() == userId;
+        allow delete: if isEditor() || (signedIn() && uid() == userId);
+      }
+    }
+
     // FEATURED CONTENT (optional homepage curation list) — public read, admin write.
     match /featuredContent/{id} {
       allow read: if true;
       allow write: if isAdmin();
+    }
+
+    // APPOINTMENTS — admin/editor only.
+    match /appointments/{id} {
+      allow read, write: if isEditor();
     }
 
     // ACTIVITY LOGS — write by any signed-in user, read by admin only.

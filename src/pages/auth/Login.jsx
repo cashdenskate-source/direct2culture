@@ -47,12 +47,20 @@ export default function Login() {
         title="Welcome back."
         kicker="Brands, artists, founders, creators — pick up where you left off."
         footer={
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash">
-            No account yet?{' '}
-            <Link to="/signup" className="text-ink hover:underline">
-              Create one →
+          <div className="space-y-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash">
+              No account yet?{' '}
+              <Link to="/signup" className="text-ink hover:underline">
+                Create one →
+              </Link>
+            </p>
+            <Link
+              to="/admin/login"
+              className="inline-block border border-ink px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
+            >
+              Admin Login →
             </Link>
-          </p>
+          </div>
         }
       >
         <form onSubmit={onSubmit} className="space-y-6">

@@ -1,0 +1,19 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+
+    // User avatars — public read, owner write only, image only, 5MB cap.
+    match /users/{userId}/avatar.{ext} {
+      allow read: if true;
+      allow write: if signedIn()
+        && uid() == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if signedIn() && uid() == userId;
+    }
+  }
+}

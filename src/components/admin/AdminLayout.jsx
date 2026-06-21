@@ -8,6 +8,11 @@ const navSections = [
     title: 'Editorial',
     items: [
       { to: '/admin/dashboard', label: 'Dashboard', end: true },
+      { to: '/admin/users', label: 'Sign-Ups' },
+      { to: '/admin/calendar', label: 'Calendar' },
+      { to: '/admin/market', label: 'Music Market' },
+      { to: '/admin/brands-market', label: 'Brand Market' },
+      { to: '/admin/releases', label: 'Upcoming Drops' },
       { to: '/admin/submissions', label: 'Submissions' },
       { to: '/admin/messages', label: 'Messages' },
       { to: '/admin/newsletter', label: 'Newsletter' },

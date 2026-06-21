@@ -6,6 +6,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,14 +22,16 @@ const hasFirebaseConfig = Boolean(firebaseConfig.projectId);
 let app = null;
 let db = null;
 let auth = null;
+let storage = null;
 
 if (hasFirebaseConfig) {
   app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
   db = getFirestore(app);
   auth = getAuth(app);
+  storage = getStorage(app);
 }
 
-export { app, db, auth, hasFirebaseConfig };
+export { app, db, auth, storage, hasFirebaseConfig };
 
 export async function submitToCollection(collectionName, data) {
   if (!hasFirebaseConfig || !db) {

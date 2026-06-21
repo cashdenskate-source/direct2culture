@@ -34,6 +34,19 @@ import AdminInterviews from './pages/admin/AdminInterviews.jsx';
 import AdminDrops from './pages/admin/AdminDrops.jsx';
 import AdminEvents from './pages/admin/AdminEvents.jsx';
 import AdminSettings from './pages/admin/AdminSettings.jsx';
+import AdminUsers from './pages/admin/AdminUsers.jsx';
+import AdminCalendar from './pages/admin/AdminCalendar.jsx';
+import AdminMarket from './pages/admin/AdminMarket.jsx';
+
+import Market from './pages/market/Market.jsx';
+import SongDetail from './pages/market/SongDetail.jsx';
+import ArtistDetail from './pages/market/ArtistDetail.jsx';
+import Upcoming from './pages/market/Upcoming.jsx';
+import Brands from './pages/market/Brands.jsx';
+import BrandDetail from './pages/market/BrandDetail.jsx';
+import SubmitRelease from './pages/dashboard/SubmitRelease.jsx';
+import AdminReleases from './pages/admin/AdminReleases.jsx';
+import AdminBrands from './pages/admin/AdminBrands.jsx';
 
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import { RequireAuth, RequireRole, RedirectIfAuthed } from './components/RouteGuard.jsx';
@@ -71,6 +84,14 @@ export default function App() {
         <Route path="/about" element={<PublicShell><About /></PublicShell>} />
         <Route path="/contact" element={<PublicShell><Contact /></PublicShell>} />
 
+        {/* Culture Stock Exchange (public) */}
+        <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
+        <Route path="/market/song/:ticker" element={<PublicShell><SongDetail /></PublicShell>} />
+        <Route path="/market/artist/:ticker" element={<PublicShell><ArtistDetail /></PublicShell>} />
+        <Route path="/market/upcoming" element={<PublicShell><Upcoming /></PublicShell>} />
+        <Route path="/market/brands" element={<PublicShell><Brands /></PublicShell>} />
+        <Route path="/market/brand/:ticker" element={<PublicShell><BrandDetail /></PublicShell>} />
+
         {/* Auth */}
         <Route path="/login" element={<RedirectIfAuthed><Login /></RedirectIfAuthed>} />
         <Route path="/signup" element={<RedirectIfAuthed><Signup /></RedirectIfAuthed>} />
@@ -92,6 +113,7 @@ export default function App() {
           <Route path="events" element={<TypedList type="event" eyebrow="Customer / Events" title="My events." kicker="Your submitted and approved events." ctaLabel="New Event" />} />
           <Route path="interview-request" element={<TypedList type="interview" eyebrow="Customer / Interview" title="Interview requests." kicker="Pitch a person, a profile, or yourself." ctaLabel="New Request" />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="submit-release" element={<SubmitRelease />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
 
@@ -114,6 +136,11 @@ export default function App() {
           <Route path="interviews" element={<AdminInterviews />} />
           <Route path="drops" element={<AdminDrops />} />
           <Route path="events" element={<AdminEvents />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="calendar" element={<AdminCalendar />} />
+          <Route path="market" element={<AdminMarket />} />
+          <Route path="releases" element={<AdminReleases />} />
+          <Route path="brands-market" element={<AdminBrands />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
 

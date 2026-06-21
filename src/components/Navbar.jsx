@@ -9,6 +9,7 @@ const links = [
   { to: '/interviews', label: 'Interviews' },
   { to: '/drops', label: 'Drops' },
   { to: '/events', label: 'Events' },
+  { to: '/market', label: 'Market' },
   { to: '/submit', label: 'Submit' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },

@@ -6,3 +6,5 @@ dist
 .firebase
 firebase-debug.log
 .vite
+serviceAccountKey.json
+functions/node_modules

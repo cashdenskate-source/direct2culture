@@ -10,6 +10,7 @@ const navItems = [
   { to: '/dashboard/drops', label: 'My Drops' },
   { to: '/dashboard/events', label: 'My Events' },
   { to: '/dashboard/interview-request', label: 'Interview Request' },
+  { to: '/dashboard/submit-release', label: 'Drop a Release' },
   { to: '/dashboard/profile', label: 'Profile' },
   { to: '/dashboard/settings', label: 'Settings' },
 ];
