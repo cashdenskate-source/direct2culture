@@ -28,7 +28,7 @@ export default function ContactForm() {
     }
     setState({ status: 'loading', message: '' });
     try {
-      await submitToCollection('contact_messages', form);
+      await submitToCollection('contactMessages', form);
       setState({ status: 'success', message: 'Message received. We read every email.' });
       setForm(empty);
     } catch {

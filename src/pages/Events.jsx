@@ -1,9 +1,11 @@
 import PageHeader from '../components/PageHeader.jsx';
 import EventCard from '../components/EventCard.jsx';
 import SEO from '../components/SEO.jsx';
-import { events } from '../data/content.js';
+import { events as seedEvents } from '../data/content.js';
+import usePublishedContent from '../hooks/usePublishedContent.js';
 
 export default function Events() {
+  const { items: events } = usePublishedContent('events', seedEvents);
   return (
     <>
       <SEO

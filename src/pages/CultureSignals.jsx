@@ -2,13 +2,15 @@ import { useState, useMemo } from 'react';
 import PageHeader from '../components/PageHeader.jsx';
 import CultureSignalCard from '../components/CultureSignalCard.jsx';
 import SEO from '../components/SEO.jsx';
-import { cultureSignals, categories } from '../data/content.js';
+import { cultureSignals as seedSignals, categories } from '../data/content.js';
+import usePublishedContent from '../hooks/usePublishedContent.js';
 
 export default function CultureSignals() {
   const [filter, setFilter] = useState('All');
+  const { items: cultureSignals } = usePublishedContent('cultureSignals', seedSignals);
   const filtered = useMemo(
     () => (filter === 'All' ? cultureSignals : cultureSignals.filter((s) => s.category === filter)),
-    [filter]
+    [filter, cultureSignals]
   );
 
   return (
@@ -21,7 +23,7 @@ export default function CultureSignals() {
         eyebrow="01 / Culture Signals"
         title="The signals underneath the noise."
         kicker="A live feed of trends, brands, sounds, fashion, skate, and internet movements — sourced direct from the people building them."
-        meta={`${cultureSignals.length} active signals`}
+        meta={`${cultureSignals?.length || 0} active signals`}
       />
 
       <section className="border-b border-ink/10 bg-bone">

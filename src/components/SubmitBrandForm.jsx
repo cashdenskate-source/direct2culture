@@ -40,7 +40,17 @@ export default function SubmitBrandForm() {
     }
     setState({ status: 'loading', message: '' });
     try {
-      await submitToCollection('brand_submissions', form);
+      await submitToCollection('submissions', {
+        ...form,
+        type: 'brand',
+        title: form.brand,
+        status: 'submitted',
+        ownerUid: null,
+        ownerEmail: form.email,
+        ownerName: form.name,
+        building: form.building,
+        pitch: form.pitch,
+      });
       setState({
         status: 'success',
         message: 'Your submission has been received. If it fits the culture, we will be in touch.',

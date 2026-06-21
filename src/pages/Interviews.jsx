@@ -1,9 +1,11 @@
 import PageHeader from '../components/PageHeader.jsx';
 import InterviewCard from '../components/InterviewCard.jsx';
 import SEO from '../components/SEO.jsx';
-import { interviews } from '../data/content.js';
+import { interviews as seedInterviews } from '../data/content.js';
+import usePublishedContent from '../hooks/usePublishedContent.js';
 
 export default function Interviews() {
+  const { items: interviews } = usePublishedContent('interviews', seedInterviews);
   return (
     <>
       <SEO

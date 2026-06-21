@@ -3,37 +3,95 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function role() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(uid()))
+        ? get(/databases/$(database)/documents/users/$(uid())).data.role
+        : null;
+    }
+    function isAdmin()  { return role() == 'admin'; }
+    function isEditor() { return role() == 'admin' || role() == 'editor'; }
+
     function isValidEmail(s) {
       return s is string && s.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$') && s.size() < 200;
     }
-
     function shortString(s, max) {
       return s is string && s.size() > 0 && s.size() <= max;
     }
 
+    // USERS — owner can read/write own; admins can read/write any.
+    // Role cannot be self-elevated: must equal existing role on update.
+    match /users/{userId} {
+      allow read: if signedIn() && (uid() == userId || isAdmin());
+      allow create: if signedIn() && uid() == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.role == 'customer';
+      allow update: if signedIn() && (
+        (uid() == userId && request.resource.data.role == resource.data.role)
+        || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // SUBMISSIONS — owner read/write own; anonymous can create public-form submissions; admin/editor full.
+    match /submissions/{id} {
+      allow read: if isEditor() || (signedIn() && resource.data.ownerUid == uid());
+      allow create: if (
+        // Authenticated customer submission
+        (signedIn() && request.resource.data.ownerUid == uid())
+        ||
+        // Public anonymous submission from /submit
+        (request.resource.data.ownerUid == null
+          && isValidEmail(request.resource.data.ownerEmail)
+          && shortString(request.resource.data.building, 4000))
+      );
+      allow update: if isEditor() || (
+        signedIn()
+        && resource.data.ownerUid == uid()
+        && resource.data.status in ['draft', 'needs_edits']
+      );
+      allow delete: if isEditor() || (
+        signedIn()
+        && resource.data.ownerUid == uid()
+        && resource.data.status == 'draft'
+      );
+    }
+
+    // NEWSLETTER — public create with email validation; admin read/delete.
     match /newsletter/{id} {
-      allow read: if false;
-      allow create: if request.resource.data.keys().hasOnly(['email', 'source', 'createdAt'])
-        && isValidEmail(request.resource.data.email);
-      allow update, delete: if false;
+      allow read, delete: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update: if isEditor();
     }
 
-    match /brand_submissions/{id} {
-      allow read: if false;
-      allow create: if shortString(request.resource.data.name, 120)
-        && isValidEmail(request.resource.data.email)
-        && shortString(request.resource.data.brand, 200)
-        && shortString(request.resource.data.category, 60)
-        && shortString(request.resource.data.building, 4000);
-      allow update, delete: if false;
-    }
-
-    match /contact_messages/{id} {
-      allow read: if false;
+    // CONTACT MESSAGES — public create; admin read/delete.
+    match /contactMessages/{id} {
+      allow read, delete: if isEditor();
       allow create: if shortString(request.resource.data.name, 120)
         && isValidEmail(request.resource.data.email)
         && shortString(request.resource.data.subject, 200)
         && shortString(request.resource.data.message, 4000);
+      allow update: if isEditor();
+    }
+
+    // PUBLIC CONTENT — anyone can read; admin/editor manage.
+    match /cultureSignals/{id} { allow read: if true; allow write: if isEditor(); }
+    match /interviews/{id}     { allow read: if true; allow write: if isEditor(); }
+    match /drops/{id}          { allow read: if true; allow write: if isEditor(); }
+    match /events/{id}         { allow read: if true; allow write: if isEditor(); }
+
+    // FEATURED CONTENT (optional homepage curation list) — public read, admin write.
+    match /featuredContent/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ACTIVITY LOGS — write by any signed-in user, read by admin only.
+    match /activityLogs/{id} {
+      allow create: if signedIn();
+      allow read: if isAdmin();
       allow update, delete: if false;
     }
   }

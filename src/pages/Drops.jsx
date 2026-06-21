@@ -2,16 +2,22 @@ import { useState, useMemo } from 'react';
 import PageHeader from '../components/PageHeader.jsx';
 import DropCard from '../components/DropCard.jsx';
 import SEO from '../components/SEO.jsx';
-import { drops } from '../data/content.js';
+import { drops as seedDrops } from '../data/content.js';
+import usePublishedContent from '../hooks/usePublishedContent.js';
 
 const filters = ['All', 'Upcoming', 'Live', 'Sold Out'];
 
 export default function Drops() {
   const [filter, setFilter] = useState('All');
+  const { items } = usePublishedContent('drops', seedDrops);
+  const drops = useMemo(
+    () => items.map((d) => ({ ...d, status: (d.dropStatus || d.status || 'upcoming').toLowerCase() })),
+    [items]
+  );
   const filtered = useMemo(() => {
     if (filter === 'All') return drops;
-    return drops.filter((d) => d.status.toLowerCase() === filter.toLowerCase());
-  }, [filter]);
+    return drops.filter((d) => d.status === filter.toLowerCase());
+  }, [filter, drops]);
 
   return (
     <>
