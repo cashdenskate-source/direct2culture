@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import PageHeader from '../components/PageHeader.jsx';
 import SEO from '../components/SEO.jsx';
+import CreatorMediaLinks from '../components/creator/CreatorMediaLinks.jsx';
+import CreatorCountdown from '../components/creator/CreatorCountdown.jsx';
+import SocialContentEngine from '../components/creator/SocialContentEngine.jsx';
 import { creatorBySlug } from '../data/creatorData.js';
 import { trackCTA } from '../lib/tracking.js';
 import { sendWebhook } from '../lib/webhooks.js';
@@ -18,6 +20,20 @@ export default function CreatorProfile() {
 
   if (!creator) return <Navigate to="/creators" replace />;
 
+  const isUnrevealed = creator.isRevealed === false;
+
+  if (isUnrevealed) {
+    return (
+      <>
+        <SEO
+          title={`${creator.blurredName || 'Coming Soon'} | Direct2Culture`}
+          description={creator.teaserText}
+        />
+        <CreatorCountdown creator={creator} />
+      </>
+    );
+  }
+
   return (
     <>
       <SEO
@@ -26,7 +42,6 @@ export default function CreatorProfile() {
         type="article"
       />
 
-      {/* Hero */}
       <div className="border-b border-ink/10">
         <div className="container-edge py-16 lg:py-24">
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
@@ -61,18 +76,7 @@ export default function CreatorProfile() {
             </button>
           </div>
 
-          {/* Quick links */}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {creator.instagram && (
-              <a href={creator.instagram} target="_blank" rel="noopener noreferrer" className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink">
-                Instagram →
-              </a>
-            )}
-            {creator.website && (
-              <a href={creator.website} target="_blank" rel="noopener noreferrer" className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink">
-                Website →
-              </a>
-            )}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             {creator.cultureScore != null && (
               <span className="font-mono text-[10px] uppercase tracking-[0.25em] border border-ink px-2 py-1">
                 Culture Score · {creator.cultureScore}
@@ -82,13 +86,13 @@ export default function CreatorProfile() {
         </div>
       </div>
 
-      {/* Story body */}
+      <CreatorMediaLinks creator={creator} />
+
       <article className="container-edge py-16 lg:py-24 max-w-3xl space-y-12">
         <StorySection title="Origin" body={creator.origin} />
         <StorySection title="The Work" body={creator.work} />
         <StorySection title="The World They Are Building" body={creator.worldbuilding} />
 
-        {/* Quote */}
         <blockquote className="border-l-4 border-ink pl-6 py-2">
           <p className="font-sans text-3xl md:text-4xl font-black tracking-tight leading-tight">
             "{creator.quote}"
@@ -98,7 +102,6 @@ export default function CreatorProfile() {
         <StorySection title="Why It Matters" body={creator.whyItMatters} />
         <StorySection title="What's Next" body={creator.whatsNext} />
 
-        {/* Video placeholder */}
         <div className="border border-ink/10 p-8 bg-ink/[0.02]">
           <p className="eyebrow">Video</p>
           <p className="mt-3 text-ink/80 leading-relaxed">
@@ -110,7 +113,8 @@ export default function CreatorProfile() {
         </div>
       </article>
 
-      {/* Tell Your Story CTA */}
+      <SocialContentEngine creator={creator} />
+
       <section className="border-t border-ink/10 bg-ink text-bone">
         <div className="container-edge py-16 lg:py-20 flex flex-wrap items-end justify-between gap-6">
           <div>

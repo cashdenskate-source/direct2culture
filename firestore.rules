@@ -114,6 +114,18 @@ service cloud.firestore {
       }
     }
 
+    // CREATOR DEBUT + EVENT INTEREST — public create with email, editor manage
+    match /creatorNotifications/{id} {
+      allow read: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update, delete: if isEditor();
+    }
+    match /eventInterest/{id} {
+      allow read: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update, delete: if isEditor();
+    }
+
     // STORYTELLING ENGINE
     match /stories/{id}              { allow read: if true; allow write: if isEditor(); }
     match /storySubmissions/{id} {

@@ -10,6 +10,7 @@ import NewsletterForm from '../components/NewsletterForm.jsx';
 import MarketPreview from '../components/MarketPreview.jsx';
 import HomeFeatured from '../components/home/HomeFeatured.jsx';
 import CreatorDome from '../components/home/CreatorDome.jsx';
+import CultureTicker from '../components/CultureTicker.jsx';
 import SEO from '../components/SEO.jsx';
 import {
   cultureSignals,
@@ -24,6 +25,7 @@ export default function Home() {
   return (
     <>
       <SEO />
+      <CultureTicker />
       <Hero />
 
       <CreatorDome />

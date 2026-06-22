@@ -21,6 +21,12 @@ import CreatorProfile from './pages/CreatorProfile.jsx';
 import Stories from './pages/Stories.jsx';
 import StoryDetail from './pages/StoryDetail.jsx';
 import TellYourStory from './pages/TellYourStory.jsx';
+import Food from './pages/Food.jsx';
+import Magazine from './pages/Magazine.jsx';
+import MagazineIssue from './pages/MagazineIssue.jsx';
+import EventConcept from './pages/EventConcept.jsx';
+import D2CPro from './pages/D2CPro.jsx';
+import AfterDrama from './pages/AfterDrama.jsx';
 import AdminCuration from './pages/admin/AdminCuration.jsx';
 import AdminStorySubmissions from './pages/admin/AdminStorySubmissions.jsx';
 
@@ -118,6 +124,12 @@ export default function App() {
         <Route path="/stories" element={<PublicShell><Stories /></PublicShell>} />
         <Route path="/stories/:slug" element={<PublicShell><StoryDetail /></PublicShell>} />
         <Route path="/tell-your-story" element={<PublicShell><TellYourStory /></PublicShell>} />
+        <Route path="/food" element={<PublicShell><Food /></PublicShell>} />
+        <Route path="/magazine" element={<PublicShell><Magazine /></PublicShell>} />
+        <Route path="/magazine/:slug" element={<PublicShell><MagazineIssue /></PublicShell>} />
+        <Route path="/events/:slug" element={<PublicShell><EventConcept /></PublicShell>} />
+        <Route path="/d2c-pro" element={<PublicShell><D2CPro /></PublicShell>} />
+        <Route path="/afterdrama" element={<PublicShell><AfterDrama /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
