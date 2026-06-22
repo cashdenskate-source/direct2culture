@@ -21,6 +21,8 @@ import CreatorProfile from './pages/CreatorProfile.jsx';
 import Stories from './pages/Stories.jsx';
 import StoryDetail from './pages/StoryDetail.jsx';
 import TellYourStory from './pages/TellYourStory.jsx';
+import AdminCuration from './pages/admin/AdminCuration.jsx';
+import AdminStorySubmissions from './pages/admin/AdminStorySubmissions.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -184,6 +186,8 @@ export default function App() {
           <Route path="releases" element={<AdminReleases />} />
           <Route path="djs" element={<AdminDJs />} />
           <Route path="creatives" element={<AdminCreatives />} />
+          <Route path="curation" element={<AdminCuration />} />
+          <Route path="story-queue" element={<AdminStorySubmissions />} />
           <Route path="brands-market" element={<AdminBrands />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

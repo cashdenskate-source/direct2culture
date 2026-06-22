@@ -9,6 +9,10 @@ const SOURCES = [
   { coll: 'submissions', icon: '🎯', label: 'submitted', linkBase: '/admin/submissions', titleFrom: (d) => d.brand || d.title || 'Untitled', subFrom: (d) => `${d.type || 'submission'} · ${d.ownerEmail || ''}` },
   { coll: 'releases', icon: '🎤', label: 'queued a release', linkBase: '/admin/releases', titleFrom: (d) => d.title, subFrom: (d) => `${d.artistName} · ${d.type} · ${d.status}` },
   { coll: 'newsletter', icon: '📰', label: 'joined newsletter', linkBase: '/admin/newsletter', titleFrom: (d) => d.email, subFrom: () => 'newsletter signup' },
+  { coll: 'storySubmissions', icon: '📖', label: 'submitted a story', linkBase: '/admin/story-queue', titleFrom: (d) => d.name || d.email, subFrom: (d) => `${d.category || 'story'} · ${d.city || ''}` },
+  { coll: 'videoSubmissions', icon: '🎥', label: 'submitted a video', linkBase: '/admin/story-queue', titleFrom: (d) => d.name || d.email, subFrom: (d) => d.email },
+  { coll: 'ticketSignups', icon: '🛹', label: 'joined RichSkater', linkBase: '/admin/story-queue', titleFrom: (d) => d.name || d.email, subFrom: (d) => `${d.email}${d.city ? ' · ' + d.city : ''}` },
+  { coll: 'dropSignups', icon: '👕', label: 'joined BarelySain', linkBase: '/admin/story-queue', titleFrom: (d) => d.name || d.email, subFrom: (d) => `${d.email}${d.city ? ' · ' + d.city : ''}` },
 ];
 
 const PAGE = 25;

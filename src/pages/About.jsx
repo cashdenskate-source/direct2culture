@@ -89,6 +89,39 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* The Direct2Culture Flywheel */}
+      <section className="border-t border-ink/10 bg-bone">
+        <div className="container-edge py-20 lg:py-28">
+          <p className="eyebrow">The Direct2Culture Flywheel</p>
+          <h2 className="display-lg mt-4">How it grows.</h2>
+          <p className="mt-6 max-w-2xl text-ink/75 text-lg">
+            Direct2Culture doesn't grow by chasing the algorithm. It grows because the people we cover bring
+            their audience with them, and the audience finds the next wave through us.
+          </p>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 max-w-4xl">
+            {[
+              ['01', 'Interview the creator', 'We sit down with the artist, founder, designer, or DJ before the algorithm catches them.'],
+              ['02', 'Creator shares', 'They post the story to their followers. The story is on their terms.'],
+              ['03', 'Audience arrives', 'Their followers land on Direct2Culture for the first time.'],
+              ['04', 'Audience subscribes', 'They join The Culture Brief and follow the Market.'],
+              ['05', 'Audience discovers other creators', 'They click through to other stories. More creators get reach.'],
+              ['06', 'Creators request coverage', 'Submissions pour in. We cover what fits the culture.'],
+              ['07', 'More stories published', 'Each story compounds. SEO compounds. Reach compounds.'],
+              ['08', 'More audience grows', 'The flywheel turns. Culture before the algorithm.'],
+            ].map(([num, title, body]) => (
+              <div key={num} className="flex gap-5">
+                <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-ash mt-1">{num}</span>
+                <div>
+                  <p className="font-sans text-lg font-bold tracking-tight">{title}</p>
+                  <p className="mt-1 text-ink/70 text-base">{body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }

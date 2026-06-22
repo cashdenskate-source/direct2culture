@@ -5,17 +5,20 @@ import { signOut } from '../lib/auth.js';
 
 const links = [
   { to: '/', label: 'Index' },
+  // Top 5 — visible on desktop (slice(1, 6))
+  { to: '/stories', label: 'Stories' },
+  { to: '/creators', label: 'Creators' },
+  { to: '/market', label: 'Market' },
+  { to: '/tell-your-story', label: 'Tell Your Story' },
+  { to: '/newsletter', label: 'The Culture Brief' },
+  // Mobile-menu + footer only
   { to: '/culture-signals', label: 'Culture Signals' },
   { to: '/interviews', label: 'Interviews' },
   { to: '/drops', label: 'Drops' },
   { to: '/events', label: 'Events' },
-  { to: '/stories', label: 'Stories' },
-  { to: '/creators', label: 'Creators' },
-  { to: '/tell-your-story', label: 'Tell Your Story' },
-  { to: '/newsletter', label: 'The Culture Brief' },
-  { to: '/market', label: 'Market' },
-  { to: '/submit', label: 'Submit' },
+  { to: '/cities', label: 'Cities' },
   { to: '/pricing', label: 'Get Featured' },
+  { to: '/submit', label: 'Submit' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];

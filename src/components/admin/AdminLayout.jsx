@@ -9,6 +9,8 @@ const navSections = [
     items: [
       { to: '/admin/dashboard', label: 'Dashboard', end: true },
       { to: '/admin/users', label: 'Sign-Ups' },
+      { to: '/admin/curation', label: 'Weekly Curation' },
+      { to: '/admin/story-queue', label: 'Story Queue' },
       { to: '/admin/calendar', label: 'Calendar' },
       { to: '/admin/market', label: 'Music Market' },
       { to: '/admin/djs', label: 'DJ Market' },
