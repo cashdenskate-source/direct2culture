@@ -20,6 +20,7 @@ import Creators from './pages/Creators.jsx';
 import CreatorProfile from './pages/CreatorProfile.jsx';
 import Stories from './pages/Stories.jsx';
 import StoryDetail from './pages/StoryDetail.jsx';
+import TellYourStory from './pages/TellYourStory.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -114,6 +115,7 @@ export default function App() {
         <Route path="/creator/:slug" element={<PublicShell><CreatorProfile /></PublicShell>} />
         <Route path="/stories" element={<PublicShell><Stories /></PublicShell>} />
         <Route path="/stories/:slug" element={<PublicShell><StoryDetail /></PublicShell>} />
+        <Route path="/tell-your-story" element={<PublicShell><TellYourStory /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />

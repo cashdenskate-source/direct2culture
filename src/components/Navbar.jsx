@@ -11,6 +11,7 @@ const links = [
   { to: '/events', label: 'Events' },
   { to: '/stories', label: 'Stories' },
   { to: '/creators', label: 'Creators' },
+  { to: '/tell-your-story', label: 'Tell Your Story' },
   { to: '/market', label: 'Market' },
   { to: '/submit', label: 'Submit' },
   { to: '/pricing', label: 'Get Featured' },
