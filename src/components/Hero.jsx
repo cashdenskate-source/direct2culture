@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { trackCTA } from '../lib/tracking.js';
 
 export default function Hero() {
   return (
@@ -29,11 +30,14 @@ export default function Hero() {
               shaping what comes next — sourced directly from the people building it.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Link to="/culture-signals" className="btn-primary">
+              <Link to="/culture-signals" onClick={() => trackCTA('explore_culture_click')} className="btn-primary">
                 Explore Culture
               </Link>
-              <Link to="/submit" className="btn-ghost">
+              <Link to="/submit" onClick={() => trackCTA('submit_brand_click')} className="btn-ghost">
                 Submit Your Brand
+              </Link>
+              <Link to="/pricing" onClick={() => trackCTA('get_featured_click')} className="btn-ghost">
+                Get Featured
               </Link>
             </div>
           </div>
