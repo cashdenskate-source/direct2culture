@@ -149,32 +149,57 @@ function BrandLinks({ brand }) {
     { label: 'TikTok', url: brand.tiktokURL },
     { label: 'Website', url: brand.websiteURL },
   ].filter((l) => l.url);
-  if (!links.length && !brand.ticker) return null;
+  const apps = [
+    { label: 'Apple App Store', url: brand.iosAppURL },
+    { label: 'Google Play', url: brand.androidAppURL },
+  ].filter((l) => l.url);
+  if (!links.length && !apps.length && !brand.ticker) return null;
   return (
-    <div className="mt-6 pt-6 border-t border-ink/10">
+    <div className="mt-6 pt-6 border-t border-ink/10 space-y-5">
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
-        ${brand.ticker} · {brand.name} · Links
+        ${brand.ticker} · {brand.name}
       </p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {links.map((l) => (
-          <a
-            key={l.label}
-            href={l.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackCTA(`story_brand_link_${l.label.toLowerCase()}`, { ticker: brand.ticker })}
+      {links.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackCTA(`story_brand_link_${l.label.toLowerCase()}`, { ticker: brand.ticker })}
+              className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
+            >
+              {l.label} →
+            </a>
+          ))}
+          <Link
+            to={`/market/brand/${brand.ticker}`}
             className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
           >
-            {l.label} →
-          </a>
-        ))}
-        <Link
-          to={`/market/brand/${brand.ticker}`}
-          className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
-        >
-          View on Market →
-        </Link>
-      </div>
+            View on Market →
+          </Link>
+        </div>
+      )}
+      {apps.length > 0 && (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Get the App</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {apps.map((l) => (
+              <a
+                key={l.label}
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackCTA(`story_app_${l.label.toLowerCase().replace(/\s+/g, '_')}`, { ticker: brand.ticker })}
+                className="bg-ink text-bone px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity"
+              >
+                {l.label} ↓
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

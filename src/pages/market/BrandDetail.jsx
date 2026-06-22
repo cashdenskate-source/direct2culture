@@ -117,15 +117,36 @@ function SocialLinks({ brand }) {
     { label: 'TikTok', url: brand.tiktokURL },
     { label: 'Website', url: brand.websiteURL },
   ].filter((l) => l.url);
-  if (!links.length) return null;
+  const apps = [
+    { label: 'Apple App Store', url: brand.iosAppURL },
+    { label: 'Google Play', url: brand.androidAppURL },
+  ].filter((l) => l.url);
+  if (!links.length && !apps.length) return null;
   return (
-    <div className="mt-6 flex flex-wrap gap-2">
-      {links.map((l) => (
-        <a key={l.label} href={l.url} target="_blank" rel="noopener noreferrer"
-          className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors">
-          {l.label} →
-        </a>
-      ))}
+    <div className="mt-6 space-y-4">
+      {links.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {links.map((l) => (
+            <a key={l.label} href={l.url} target="_blank" rel="noopener noreferrer"
+              className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors">
+              {l.label} →
+            </a>
+          ))}
+        </div>
+      )}
+      {apps.length > 0 && (
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Get the App</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {apps.map((l) => (
+              <a key={l.label} href={l.url} target="_blank" rel="noopener noreferrer"
+                className="border border-ink bg-ink text-bone px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity">
+                {l.label} ↓
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
