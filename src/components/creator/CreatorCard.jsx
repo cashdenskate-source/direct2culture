@@ -39,10 +39,14 @@ export default function CreatorCard({ creator }) {
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
           {creator.category} · {creator.city}
         </p>
-        <h3 className="mt-2 font-sans text-2xl font-black tracking-tight">{creator.name}</h3>
-        <p className="mt-2 text-ink/75 text-sm line-clamp-2">{creator.tagline}</p>
+        <h3 className="mt-2 font-sans text-2xl font-black tracking-tight blur-[6px] select-none transition-all duration-500 group-hover:blur-[1.5px]">
+          {creator.name}
+        </h3>
+        <p className="mt-2 text-ink/75 text-sm line-clamp-2 blur-[4px] select-none transition-all duration-500 group-hover:blur-[1px]">
+          {creator.tagline}
+        </p>
         <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.25em] text-ink group-hover:underline">
-          Meet Creator →
+          Reveal Creator →
         </p>
       </div>
     </Link>
