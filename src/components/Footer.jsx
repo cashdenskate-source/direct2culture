@@ -18,12 +18,12 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-4">
-            <p className="eyebrow text-bone/50">D2C / Dispatch</p>
+            <p className="eyebrow text-bone/50">D2C / The Culture Brief</p>
             <h3 className="mt-4 font-sans text-2xl font-bold tracking-tighter">
-              The weekly culture brief.
+              The Culture Brief.
             </h3>
             <p className="mt-3 text-bone/60 text-sm">
-              One email a week. No filler. Just the signal.
+              Weekly. Artists, brands, creators, drops, events, culture signals. Skip the filler.
             </p>
             <div className="mt-6">
               <NewsletterForm variant="dark" />
@@ -40,7 +40,10 @@ export default function Footer() {
               <li><Link to="/submit" className="hover:text-bone text-bone/70">Submit Your Brand</Link></li>
               <li><Link to="/market" className="hover:text-bone text-bone/70">Market</Link></li>
               <li><Link to="/pricing" className="hover:text-bone text-bone/70">Get Featured</Link></li>
-              <li><Link to="/newsletter" className="hover:text-bone text-bone/70">Newsletter</Link></li>
+              <li><Link to="/newsletter" className="hover:text-bone text-bone/70">The Culture Brief</Link></li>
+              <li><Link to="/stories" className="hover:text-bone text-bone/70">Stories</Link></li>
+              <li><Link to="/creators" className="hover:text-bone text-bone/70">Creators</Link></li>
+              <li><Link to="/tell-your-story" className="hover:text-bone text-bone/70">Tell Your Story</Link></li>
               <li><Link to="/contact" className="hover:text-bone text-bone/70">Contact</Link></li>
             </ul>
           </div>

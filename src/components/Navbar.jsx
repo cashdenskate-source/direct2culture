@@ -12,6 +12,7 @@ const links = [
   { to: '/stories', label: 'Stories' },
   { to: '/creators', label: 'Creators' },
   { to: '/tell-your-story', label: 'Tell Your Story' },
+  { to: '/newsletter', label: 'The Culture Brief' },
   { to: '/market', label: 'Market' },
   { to: '/submit', label: 'Submit' },
   { to: '/pricing', label: 'Get Featured' },

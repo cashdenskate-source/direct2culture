@@ -5,7 +5,7 @@ import { submitToCollection } from '../lib/firebase.js';
 import { notifyNewsletterSignup } from '../lib/notifications.js';
 import { sendWebhook } from '../lib/webhooks.js';
 
-const CATEGORIES = ['Music', 'Fashion', 'Skate', 'Brands', 'DJs', 'Events', 'Creative Market'];
+const CATEGORIES = ['Music', 'Fashion', 'Skate', 'DJs', 'Brands', 'Events', 'Creators', 'Markets'];
 
 export default function Newsletter() {
   const [form, setForm] = useState({ name: '', email: '', interests: [] });
@@ -40,12 +40,12 @@ export default function Newsletter() {
 
   return (
     <>
-      <SEO title="Newsletter | Direct2Culture" description="The Direct2Culture newsletter. Music, fashion, skate, brands, DJs, events, creatives — culture before the algorithm." />
+      <SEO title="The Culture Brief | Direct2Culture" description="The weekly Direct2Culture brief on artists, brands, creators, drops, events, and culture signals shaping what comes next." />
       <div className="container-edge py-12 lg:py-16">
         <PageHeader
-          eyebrow="Direct2Culture / Newsletter"
-          title="On the list."
-          kicker="The drops, signals, and interviews moving culture — direct to your inbox. Pick what you want, skip what you don't."
+          eyebrow="Direct2Culture / The Culture Brief"
+          title="The Culture Brief."
+          kicker="The weekly brief on artists, brands, creators, drops, events, and culture signals shaping what comes next. Pick what you want, skip what you don't."
         />
 
         <form onSubmit={onSubmit} className="mt-12 max-w-2xl space-y-6">
@@ -79,7 +79,7 @@ export default function Newsletter() {
           </div>
 
           <button type="submit" disabled={state.status === 'loading'} className="btn-primary disabled:opacity-50">
-            {state.status === 'loading' ? 'Subscribing…' : 'Subscribe →'}
+            {state.status === 'loading' ? 'Subscribing…' : 'Join The Culture Brief →'}
           </button>
 
           {state.message && (
