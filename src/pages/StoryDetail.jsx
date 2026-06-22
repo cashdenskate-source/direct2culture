@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StorySignupForm from '../components/story/StorySignupForm.jsx';
 import { storyBySlug } from '../data/storyData.js';
 import { submitTicketSignup, submitDropSignup } from '../lib/stories.js';
+import { getBrandByTicker } from '../lib/brands.js';
 import { trackCTA } from '../lib/tracking.js';
 import { sendWebhook } from '../lib/webhooks.js';
 import {
@@ -12,6 +14,17 @@ import {
 export default function StoryDetail() {
   const { slug } = useParams();
   const story = storyBySlug(slug);
+  const [brand, setBrand] = useState(null);
+
+  useEffect(() => {
+    if (!story?.ticker) return;
+    let cancelled = false;
+    (async () => {
+      const b = await getBrandByTicker(story.ticker);
+      if (!cancelled) setBrand(b);
+    })();
+    return () => { cancelled = true; };
+  }, [story?.ticker]);
 
   if (!story) return <Navigate to="/stories" replace />;
 
@@ -69,6 +82,11 @@ export default function StoryDetail() {
               <CTAButton key={c.label} cta={c} />
             ))}
           </div>
+
+          {/* Brand social / store links pulled from /admin/brands-market */}
+          {brand && (
+            <BrandLinks brand={brand} />
+          )}
         </div>
       </div>
 
@@ -121,6 +139,43 @@ export default function StoryDetail() {
         <Link to="/stories" className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink">← All stories</Link>
       </div>
     </>
+  );
+}
+
+function BrandLinks({ brand }) {
+  const links = [
+    { label: 'Store', url: brand.storeURL },
+    { label: 'Instagram', url: brand.instagramURL },
+    { label: 'TikTok', url: brand.tiktokURL },
+    { label: 'Website', url: brand.websiteURL },
+  ].filter((l) => l.url);
+  if (!links.length && !brand.ticker) return null;
+  return (
+    <div className="mt-6 pt-6 border-t border-ink/10">
+      <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+        ${brand.ticker} · {brand.name} · Links
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {links.map((l) => (
+          <a
+            key={l.label}
+            href={l.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackCTA(`story_brand_link_${l.label.toLowerCase()}`, { ticker: brand.ticker })}
+            className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
+          >
+            {l.label} →
+          </a>
+        ))}
+        <Link
+          to={`/market/brand/${brand.ticker}`}
+          className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
+        >
+          View on Market →
+        </Link>
+      </div>
+    </div>
   );
 }
 
