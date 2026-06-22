@@ -114,6 +114,29 @@ service cloud.firestore {
       }
     }
 
+    // STORYTELLING ENGINE
+    match /stories/{id}              { allow read: if true; allow write: if isEditor(); }
+    match /storySubmissions/{id} {
+      allow read: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update, delete: if isEditor();
+    }
+    match /videoSubmissions/{id} {
+      allow read: if isEditor();
+      allow create: if request.resource.data.name is string;
+      allow update, delete: if isEditor();
+    }
+    match /ticketSignups/{id} {
+      allow read: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update, delete: if isEditor();
+    }
+    match /dropSignups/{id} {
+      allow read: if isEditor();
+      allow create: if isValidEmail(request.resource.data.email);
+      allow update, delete: if isEditor();
+    }
+
     // FEATURED CONTENT (optional homepage curation list) — public read, admin write.
     match /featuredContent/{id} {
       allow read: if true;

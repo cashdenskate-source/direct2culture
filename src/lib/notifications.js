@@ -81,3 +81,24 @@ export const notifySubmissionNeedsEdits = (sub, user, notes) =>
     body: `Editorial flagged your submission "${sub.brand || sub.title}" for revisions:\n\n${notes || '(no notes)'}\n\nLog in to /dashboard/submissions to update.`,
     tag: 'submission_needs_edits',
   });
+
+export const notifyNewStorySubmission = (sub) =>
+  send({ to: ADMIN_EMAIL, subject: `New story submission: ${sub.name || sub.email}`, body: JSON.stringify(sub, null, 2), tag: 'new_story_submission' });
+
+export const notifyNewCreatorSubmission = (sub) =>
+  send({ to: ADMIN_EMAIL, subject: `New creator submission: ${sub.name || sub.email}`, body: JSON.stringify(sub, null, 2), tag: 'new_creator_submission' });
+
+export const notifyNewVideoSubmission = (sub) =>
+  send({ to: ADMIN_EMAIL, subject: `New video submission: ${sub.name || sub.email}`, body: JSON.stringify(sub, null, 2), tag: 'new_video_submission' });
+
+export const notifyRichskaterSignup = (entry) =>
+  send({ to: ADMIN_EMAIL, subject: `RichSkater signup: ${entry.email}`, body: JSON.stringify(entry, null, 2), tag: 'richskater_ticket_signup' });
+
+export const notifyBarelysainSignup = (entry) =>
+  send({ to: ADMIN_EMAIL, subject: `BarelySain signup: ${entry.email}`, body: JSON.stringify(entry, null, 2), tag: 'barelysain_drop_signup' });
+
+export const notifyStoryApproved = (story, user) =>
+  send({ to: user.email, subject: 'Your story was approved on Direct2Culture', body: `Your story "${story.title}" is approved and will be published.`, tag: 'story_approved' });
+
+export const notifyStoryRejected = (story, user) =>
+  send({ to: user.email, subject: 'Direct2Culture story update', body: `We reviewed your story "${story.title}" and won't be running it this round.`, tag: 'story_rejected' });

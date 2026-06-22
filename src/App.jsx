@@ -16,6 +16,8 @@ import Terms from './pages/Terms.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Cities from './pages/Cities.jsx';
 import CityDetail from './pages/CityDetail.jsx';
+import Creators from './pages/Creators.jsx';
+import CreatorProfile from './pages/CreatorProfile.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -106,6 +108,8 @@ export default function App() {
         <Route path="/privacy" element={<PublicShell><Privacy /></PublicShell>} />
         <Route path="/cities" element={<PublicShell><Cities /></PublicShell>} />
         <Route path="/cities/:slug" element={<PublicShell><CityDetail /></PublicShell>} />
+        <Route path="/creators" element={<PublicShell><Creators /></PublicShell>} />
+        <Route path="/creator/:slug" element={<PublicShell><CreatorProfile /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />

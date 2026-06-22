@@ -25,6 +25,20 @@
   <url><loc>https://direct2culture.com/cities/miami</loc><priority>0.6</priority></url>
   <url><loc>https://direct2culture.com/cities/new-york</loc><priority>0.6</priority></url>
   <url><loc>https://direct2culture.com/cities/london</loc><priority>0.6</priority></url>
+  <url><loc>https://direct2culture.com/creators</loc><priority>0.9</priority></url>
+  <url><loc>https://direct2culture.com/creator/cee</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/smith</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/boy-floss</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/vino</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/calixte</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/slie-q</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/stevie</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/dj-funky</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/neno</loc><priority>0.8</priority></url>
+  <url><loc>https://direct2culture.com/creator/quay</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/shed-da-god</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/kj-scooter-son</loc><priority>0.7</priority></url>
+  <url><loc>https://direct2culture.com/creator/nin</loc><priority>0.7</priority></url>
   <url><loc>https://direct2culture.com/login</loc><priority>0.3</priority></url>
   <url><loc>https://direct2culture.com/signup</loc><priority>0.5</priority></url>
 </urlset>

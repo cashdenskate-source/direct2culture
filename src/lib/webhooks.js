@@ -14,6 +14,14 @@ const KNOWN_EVENTS = new Set([
   'published_story',
   'new_dj_spin',
   'new_market_profile',
+  // Storytelling engine
+  'new_story_submission',
+  'new_creator_submission',
+  'new_video_submission',
+  'richskater_ticket_signup',
+  'barelysain_drop_signup',
+  'creator_profile_view',
+  'story_published',
 ]);
 
 export async function sendWebhook(event, payload) {
