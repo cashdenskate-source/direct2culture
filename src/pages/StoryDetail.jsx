@@ -1,0 +1,141 @@
+import { useParams, Link, Navigate } from 'react-router-dom';
+import SEO from '../components/SEO.jsx';
+import StorySignupForm from '../components/story/StorySignupForm.jsx';
+import { storyBySlug } from '../data/storyData.js';
+import { submitTicketSignup, submitDropSignup } from '../lib/stories.js';
+import { trackCTA } from '../lib/tracking.js';
+import { sendWebhook } from '../lib/webhooks.js';
+import {
+  notifyRichskaterSignup, notifyBarelysainSignup,
+} from '../lib/notifications.js';
+
+export default function StoryDetail() {
+  const { slug } = useParams();
+  const story = storyBySlug(slug);
+
+  if (!story) return <Navigate to="/stories" replace />;
+
+  const isRichskater = slug === 'richskater';
+  const isBarelysain = slug === 'barelysain';
+
+  async function onSignup(form) {
+    const payload = { ...form, story: slug, brand: story.brand, ticker: story.ticker };
+    if (isRichskater) {
+      await submitTicketSignup({ ...payload, kind: 'richskater_ticket' });
+      notifyRichskaterSignup(payload).catch(() => {});
+      sendWebhook('richskater_ticket_signup', payload).catch(() => {});
+      trackCTA('richskater_ticket_signup', { email: payload.email });
+    } else if (isBarelysain) {
+      await submitDropSignup({ ...payload, kind: 'barelysain_drop' });
+      notifyBarelysainSignup(payload).catch(() => {});
+      sendWebhook('barelysain_drop_signup', payload).catch(() => {});
+      trackCTA('barelysain_drop_signup', { email: payload.email });
+    } else {
+      await submitDropSignup({ ...payload, kind: 'generic_story' });
+    }
+  }
+
+  const signupId = isRichskater ? 'richskater-signup' : 'barelysain-signup';
+  const signupHeading = isRichskater ? 'RichSkater Ticket Signup' : isBarelysain ? 'BarelySain Drop Signup' : 'Story Signup';
+  const signupSubLabel = isRichskater
+    ? 'Get priority access when the next RichSkater event drops.'
+    : isBarelysain
+    ? 'Be first to know when the next BarelySain chapter releases.'
+    : 'Get story updates.';
+
+  return (
+    <>
+      <SEO
+        title={`${story.title} | Direct2Culture`}
+        description={story.excerpt}
+        type="article"
+      />
+
+      {/* Hero */}
+      <div className="border-b border-ink/10">
+        <div className="container-edge py-16 lg:py-24">
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+            {story.category} / {story.brand} · ${story.ticker}
+          </p>
+          <h1 className="mt-3 font-sans font-black tracking-tightest text-5xl md:text-7xl lg:text-8xl leading-[0.95]">
+            {story.title}.
+          </h1>
+          <p className="mt-6 max-w-2xl text-ink/75 text-xl md:text-2xl leading-snug">
+            {story.subtitle}
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            {story.ctas.map((c) => (
+              <CTAButton key={c.label} cta={c} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quote */}
+      {story.quote && (
+        <div className="bg-ink text-bone">
+          <div className="container-edge py-16 lg:py-24 max-w-3xl">
+            <p className="font-sans text-3xl md:text-5xl font-black tracking-tight leading-tight">{story.quote}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Body sections */}
+      <article className="container-edge py-16 lg:py-24 max-w-3xl space-y-12">
+        {story.bodySections.map((sec) => (
+          <section key={sec.title}>
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">{sec.title}</p>
+            <p className="mt-3 text-lg md:text-xl text-ink/85 leading-relaxed">{sec.body}</p>
+          </section>
+        ))}
+      </article>
+
+      {/* Signup form */}
+      <section className="border-t border-ink/10 bg-ink/[0.03]">
+        <div className="container-edge py-16 lg:py-20 max-w-3xl">
+          <StorySignupForm
+            id={signupId}
+            heading={signupHeading}
+            sublabel={signupSubLabel}
+            onSubmit={onSignup}
+            ctaLabel={isRichskater ? 'Join RichSkater →' : isBarelysain ? 'Join The Next Drop →' : 'Sign Up →'}
+          />
+        </div>
+      </section>
+
+      {/* Tell Your Story */}
+      <section className="border-t border-ink/10 bg-ink text-bone">
+        <div className="container-edge py-16 lg:py-20 flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="eyebrow text-bone/50">Tell Your Story</p>
+            <h2 className="mt-2 font-sans text-3xl md:text-5xl font-black tracking-tightest">Got a story like this?</h2>
+          </div>
+          <Link to="/tell-your-story" className="bg-bone text-ink px-6 py-3 font-mono text-[11px] uppercase tracking-[0.25em] hover:opacity-90">
+            Tell Your Story →
+          </Link>
+        </div>
+      </section>
+
+      <div className="container-edge py-8">
+        <Link to="/stories" className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink">← All stories</Link>
+      </div>
+    </>
+  );
+}
+
+function CTAButton({ cta }) {
+  const onClick = () => trackCTA(`story_cta_${cta.label.toLowerCase().replace(/\s+/g, '_')}`);
+  if (cta.kind === 'signup' && cta.link?.startsWith('#')) {
+    return (
+      <a href={cta.link} onClick={onClick} className="border border-ink px-5 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors">
+        {cta.label} →
+      </a>
+    );
+  }
+  return (
+    <Link to={cta.link} onClick={onClick} className="border border-ink px-5 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors">
+      {cta.label} →
+    </Link>
+  );
+}

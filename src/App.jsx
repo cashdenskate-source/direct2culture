@@ -18,6 +18,8 @@ import Cities from './pages/Cities.jsx';
 import CityDetail from './pages/CityDetail.jsx';
 import Creators from './pages/Creators.jsx';
 import CreatorProfile from './pages/CreatorProfile.jsx';
+import Stories from './pages/Stories.jsx';
+import StoryDetail from './pages/StoryDetail.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -110,6 +112,8 @@ export default function App() {
         <Route path="/cities/:slug" element={<PublicShell><CityDetail /></PublicShell>} />
         <Route path="/creators" element={<PublicShell><Creators /></PublicShell>} />
         <Route path="/creator/:slug" element={<PublicShell><CreatorProfile /></PublicShell>} />
+        <Route path="/stories" element={<PublicShell><Stories /></PublicShell>} />
+        <Route path="/stories/:slug" element={<PublicShell><StoryDetail /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
