@@ -9,6 +9,7 @@ import BrandCard from '../components/BrandCard.jsx';
 import NewsletterForm from '../components/NewsletterForm.jsx';
 import MarketPreview from '../components/MarketPreview.jsx';
 import HomeFeatured from '../components/home/HomeFeatured.jsx';
+import CreatorDome from '../components/home/CreatorDome.jsx';
 import SEO from '../components/SEO.jsx';
 import {
   cultureSignals,
@@ -24,6 +25,8 @@ export default function Home() {
     <>
       <SEO />
       <Hero />
+
+      <CreatorDome />
 
       <HomeFeatured />
 
