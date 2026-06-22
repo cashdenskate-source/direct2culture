@@ -8,6 +8,7 @@ import EventCard from '../components/EventCard.jsx';
 import BrandCard from '../components/BrandCard.jsx';
 import NewsletterForm from '../components/NewsletterForm.jsx';
 import MarketPreview from '../components/MarketPreview.jsx';
+import HomeFeatured from '../components/home/HomeFeatured.jsx';
 import SEO from '../components/SEO.jsx';
 import {
   cultureSignals,
@@ -23,6 +24,8 @@ export default function Home() {
     <>
       <SEO />
       <Hero />
+
+      <HomeFeatured />
 
       <Section
         eyebrow="01 / Culture Signals"
