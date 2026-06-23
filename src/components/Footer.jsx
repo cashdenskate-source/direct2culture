@@ -33,6 +33,7 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <p className="eyebrow text-bone/50">D2C / Index</p>
             <ul className="mt-4 space-y-3 font-sans text-base">
+              <li><Link to="/identity-graph" className="hover:text-bone text-bone/70">Identity Graph</Link></li>
               <li><Link to="/culture-signals" className="hover:text-bone text-bone/70">Culture Signals</Link></li>
               <li><Link to="/interviews" className="hover:text-bone text-bone/70">Interviews</Link></li>
               <li><Link to="/drops" className="hover:text-bone text-bone/70">Drops</Link></li>

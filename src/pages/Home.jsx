@@ -32,6 +32,53 @@ export default function Home() {
       <CultureTicker />
       <Hero />
 
+      <section className="border-b border-ink/10 bg-bone">
+        <div className="container-edge py-20 lg:py-28">
+          <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 items-end">
+            <div className="lg:col-span-7">
+              <p className="eyebrow">D2C / Identity Graph</p>
+              <h2 className="display-lg mt-4">
+                Streaming counts.<br />We identify.
+              </h2>
+              <p className="mt-6 max-w-xl text-ink/75 text-xl leading-snug">
+                See the actual humans engaging with your work — by name, city,
+                and what they're moving. DistroKid gives you a number.
+                Direct2Culture gives you an audience.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link to="/identity-graph" className="btn-primary">
+                  Explore The Graph →
+                </Link>
+                <Link to="/dashboard/audience" className="btn-ghost">
+                  Open Creator Dashboard →
+                </Link>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <div className="border border-ink/15 p-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+                  What you'll see
+                </p>
+                <ul className="mt-5 space-y-4 text-ink/85">
+                  <li className="flex items-baseline gap-3">
+                    <span className="font-mono text-[10px] text-ash w-6 shrink-0">01</span>
+                    <span>Fan names and cities, attributed to every story read and music link click on D2C.</span>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span className="font-mono text-[10px] text-ash w-6 shrink-0">02</span>
+                    <span>Drop waitlists, event RSVPs, newsletter signups — every action tied to a real account.</span>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span className="font-mono text-[10px] text-ash w-6 shrink-0">03</span>
+                    <span>Email + phone unlock only with explicit fan consent. Streaming data stays aggregate.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <LazyMount minHeight={560} rootMargin="200px">
         <CreatorDome />
       </LazyMount>
