@@ -5,6 +5,7 @@ import { signOut } from '../../lib/auth.js';
 
 const navItems = [
   { to: '/dashboard', label: 'Overview', end: true },
+  { to: '/dashboard/audience', label: 'Audience' },
   { to: '/dashboard/submissions', label: 'My Submissions' },
   { to: '/dashboard/new-submission', label: 'New Submission' },
   { to: '/dashboard/drops', label: 'My Drops' },
