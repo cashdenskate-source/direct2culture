@@ -31,6 +31,8 @@ import AdminCuration from './pages/admin/AdminCuration.jsx';
 import AdminStorySubmissions from './pages/admin/AdminStorySubmissions.jsx';
 import IdentityGraph from './pages/IdentityGraph.jsx';
 import Today from './pages/Today.jsx';
+import Podcast from './pages/Podcast.jsx';
+import PodcastEpisode from './pages/PodcastEpisode.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -141,6 +143,8 @@ export default function App() {
         <Route path="/afterdrama" element={<PublicShell><AfterDrama /></PublicShell>} />
         <Route path="/identity-graph" element={<PublicShell><IdentityGraph /></PublicShell>} />
         <Route path="/today" element={<PublicShell><Today /></PublicShell>} />
+        <Route path="/podcast" element={<PublicShell><Podcast /></PublicShell>} />
+        <Route path="/podcast/:slug" element={<PublicShell><PodcastEpisode /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />

@@ -20,6 +20,7 @@ export const ACTION = {
   EVENT_JOINED: 'eventJoined',
   DROP_WAITLIST_JOINED: 'dropWaitlistJoined',
   NEWSLETTER_SUBSCRIBED: 'newsletterSubscribed',
+  PODCAST_LISTENED: 'podcastListened',
 };
 
 export const ENTITY = {
@@ -31,6 +32,7 @@ export const ENTITY = {
   EVENT: 'event',
   DROP: 'drop',
   NEWSLETTER: 'newsletter',
+  PODCAST: 'podcast',
 };
 
 export const ACTION_LABEL = {
@@ -44,6 +46,7 @@ export const ACTION_LABEL = {
   eventJoined: 'Event joined',
   dropWaitlistJoined: 'Drop waitlist joined',
   newsletterSubscribed: 'Newsletter subscribed',
+  podcastListened: 'Podcast played',
 };
 
 // --- Reads (pure) ---
@@ -171,6 +174,9 @@ export const trackWaitlistJoin = ({ user, dropId, dropName, platform }) =>
 
 export const trackNewsletterSignup = ({ user, newsletterId, newsletterName, platform }) =>
   track({ user, entityType: ENTITY.NEWSLETTER, entityId: newsletterId, entityName: newsletterName, actionType: ACTION.NEWSLETTER_SUBSCRIBED, platform });
+
+export const trackPodcastListen = ({ user, episodeId, episodeName, platform }) =>
+  track({ user, entityType: ENTITY.PODCAST, entityId: episodeId, entityName: episodeName, actionType: ACTION.PODCAST_LISTENED, platform });
 
 // --- Consent ---
 

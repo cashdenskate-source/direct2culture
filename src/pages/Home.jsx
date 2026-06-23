@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { DailyLawRibbon } from '../components/DailyLaw.jsx';
 import Hero from '../components/Hero.jsx';
+import { latestEpisode } from '../data/podcastData.js';
 import SectionTitle from '../components/SectionTitle.jsx';
 import CultureSignalCard from '../components/CultureSignalCard.jsx';
 import InterviewCard from '../components/InterviewCard.jsx';
@@ -26,6 +27,7 @@ import {
 } from '../data/content.js';
 
 export default function Home() {
+  const latestEp = latestEpisode();
   return (
     <>
       <SEO />
@@ -80,6 +82,41 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {latestEp && (
+        <section className="border-b border-ink/10 bg-ink/[0.02]">
+          <div className="container-edge py-20 lg:py-28">
+            <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 items-end">
+              <div className="lg:col-span-7">
+                <p className="eyebrow">D2C / Podcast</p>
+                <h2 className="display-lg mt-4">Long-form,<br />on the record.</h2>
+                <p className="mt-6 max-w-xl text-ink/75 text-xl leading-snug">
+                  The Direct2Culture Podcast — hour-long conversations with the
+                  brands, artists, and creators shaping what comes next.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link to="/podcast" className="btn-primary">Browse Episodes →</Link>
+                  <Link to={`/podcast/${latestEp.slug}`} className="btn-ghost">Play Latest →</Link>
+                </div>
+              </div>
+              <div className="lg:col-span-5">
+                <Link
+                  to={`/podcast/${latestEp.slug}`}
+                  className="block border border-ink/15 p-6 hover:border-ink transition-colors bg-bone"
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Latest Episode</p>
+                  <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.2em] text-ash">
+                    {latestEp.accent} · {latestEp.duration}
+                  </p>
+                  <h3 className="mt-2 font-sans text-2xl font-bold tracking-tight">{latestEp.title}</h3>
+                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-ash">w/ {latestEp.guest}</p>
+                  <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-ink">Play episode →</p>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <LazyMount minHeight={560} rootMargin="200px">
         <CreatorDome />

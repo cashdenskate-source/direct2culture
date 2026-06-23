@@ -35,6 +35,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-3 font-sans text-base">
               <li><Link to="/identity-graph" className="hover:text-bone text-bone/70">Identity Graph</Link></li>
               <li><Link to="/today" className="hover:text-bone text-bone/70">Today's Law</Link></li>
+              <li><Link to="/podcast" className="hover:text-bone text-bone/70">Podcast</Link></li>
               <li><Link to="/culture-signals" className="hover:text-bone text-bone/70">Culture Signals</Link></li>
               <li><Link to="/interviews" className="hover:text-bone text-bone/70">Interviews</Link></li>
               <li><Link to="/drops" className="hover:text-bone text-bone/70">Drops</Link></li>

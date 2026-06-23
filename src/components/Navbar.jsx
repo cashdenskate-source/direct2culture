@@ -14,6 +14,7 @@ const links = [
   // Mobile-menu + footer only
   { to: '/identity-graph', label: 'Identity Graph' },
   { to: '/today', label: 'Today\'s Law' },
+  { to: '/podcast', label: 'Podcast' },
   { to: '/magazine', label: 'Magazine' },
   { to: '/food', label: 'Food' },
   { to: '/afterdrama', label: 'AfterDrama' },
@@ -80,12 +81,26 @@ export default function Navbar() {
       }`}
     >
       <div className="container-edge flex items-center justify-between py-4 md:py-5">
-        <Link to="/" className="flex items-center gap-3 group">
-          <span className="block h-2 w-2 bg-ink group-hover:rotate-45 transition-transform duration-500" />
-          <span className="font-sans text-lg md:text-xl font-black tracking-tightest">
-            DIRECT<span className="text-ash">2</span>CULTURE
-          </span>
-        </Link>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <button
+            aria-label="Menu"
+            onClick={() => setOpen(!open)}
+            className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink hover:opacity-70"
+          >
+            <span className="flex flex-col gap-[5px]">
+              <span className={`block h-px w-5 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
+              <span className={`block h-px w-5 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
+              <span className={`block h-px w-5 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
+            </span>
+            <span className="hidden sm:inline">{open ? 'Close' : 'Menu'}</span>
+          </button>
+          <Link to="/" className="flex items-center gap-3 group">
+            <span className="block h-2 w-2 bg-ink group-hover:rotate-45 transition-transform duration-500" />
+            <span className="font-sans text-lg md:text-xl font-black tracking-tightest">
+              DIRECT<span className="text-ash">2</span>CULTURE
+            </span>
+          </Link>
+        </div>
 
         <nav className="hidden lg:flex items-center gap-7">
           {links.slice(1, 6).map((l) => (
@@ -164,30 +179,7 @@ export default function Navbar() {
               </div>
             </>
           )}
-
-          <button
-            aria-label="Menu"
-            onClick={() => setOpen(!open)}
-            className="flex items-center gap-2 border-l border-ink/15 pl-4 font-mono text-[11px] uppercase tracking-[0.2em] text-ink hover:opacity-70"
-          >
-            <span className="flex flex-col gap-[5px]">
-              <span className={`block h-px w-5 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
-              <span className={`block h-px w-5 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
-              <span className={`block h-px w-5 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
-            </span>
-            <span>{open ? 'Close' : 'Menu'}</span>
-          </button>
         </div>
-
-        <button
-          aria-label="Menu"
-          onClick={() => setOpen(!open)}
-          className="lg:hidden flex flex-col gap-[5px] p-2 -mr-2"
-        >
-          <span className={`block h-px w-6 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
-          <span className={`block h-px w-6 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
-          <span className={`block h-px w-6 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
-        </button>
       </div>
 
       {open && (
