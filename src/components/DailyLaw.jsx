@@ -36,7 +36,7 @@ export function DailyLawRibbon() {
 // Full expansion for the /today page.
 export function DailyLawFull() {
   const today = new Date();
-  const { law, body } = todaysLaw(today);
+  const { law, body, source } = todaysLaw(today);
   return (
     <div>
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
@@ -44,6 +44,11 @@ export function DailyLawFull() {
       </p>
       <h1 className="display-lg mt-4">{law}</h1>
       <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink/80">{body}</p>
+      {source && (
+        <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+          {source} · Robert Greene
+        </p>
+      )}
     </div>
   );
 }

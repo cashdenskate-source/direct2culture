@@ -1,129 +1,255 @@
-// Daily Laws of Culture — seed set.
-// 30 entries cycle by day-of-year until the full 366-entry calendar is curated
-// (Phase B: admin-editable via Firestore).
-// Each law is short enough to fit on a single homepage line; the body is the
-// "why" you read on the /today page.
+// Daily Laws — adapted from Robert Greene's *The 48 Laws of Power*
+// (Viking, 1998). Each entry uses the Law itself as the headline (Greene's
+// work, attributed) with original D2C-flavored commentary in the body.
+// Cycles by day-of-year so every calendar day maps deterministically.
+
+export const lawsAttribution = {
+  author: 'Robert Greene',
+  book: 'The 48 Laws of Power',
+  publisher: 'Viking, 1998',
+  buyUrl: 'https://bookshop.org/search?keywords=robert+greene+48+laws+of+power',
+};
 
 export const dailyLaws = [
   {
-    law: 'Culture moves before the algorithm sees it.',
-    body: 'By the time a trend trends, it has already left the room it was born in. Be in the room.',
+    law: 'Never outshine the master.',
+    body: 'The artist who publicly upstages their producer, the brand that humiliates its retailer — both get cut. Find the room to grow without provoking the people above you.',
+    source: 'Law 1 · The 48 Laws of Power',
   },
   {
-    law: 'Identify the audience. Don\'t count the clicks.',
-    body: 'A number is forgettable. A name shows up to the next thing.',
+    law: 'Never put too much trust in friends. Learn how to use enemies.',
+    body: 'Friends will resent your wins; rivals, sharpened by competition, often deliver harder. The best collaborator is the person who needs to prove something to you.',
+    source: 'Law 2 · The 48 Laws of Power',
   },
   {
-    law: 'Distribution is rented. Identity is owned.',
-    body: 'Spotify, TikTok, Instagram — none of them are yours. The relationship with the person on the other end is the only thing you keep.',
+    law: 'Conceal your intentions.',
+    body: 'Show people the work, not the strategy. The drop they don\'t see coming is the drop they can\'t react to.',
+    source: 'Law 3 · The 48 Laws of Power',
   },
   {
-    law: 'The brand that doesn\'t ask permission sets the precedent.',
-    body: 'Permission-based marketing is permission-based culture. The work that lasts didn\'t wait for approval.',
+    law: 'Always say less than necessary.',
+    body: 'The artist who explains the song shrinks it. Let the work outlast the press release.',
+    source: 'Law 4 · The 48 Laws of Power',
   },
   {
-    law: 'A scene survives on its own language. Steal it and you become a tourist.',
-    body: 'Borrow it earned, not borrowed cheap. The audience knows the difference within one sentence.',
+    law: 'So much depends on reputation — guard it with your life.',
+    body: 'One bad collab, one wrong cosign — it follows you for a decade. Curate who you stand next to as carefully as the work you sign.',
+    source: 'Law 5 · The 48 Laws of Power',
   },
   {
-    law: 'If you can be replaced by a trend, you were a trend.',
-    body: 'Style is what survives the cycle. Trends are what fill the time between styles.',
+    law: 'Court attention at all cost.',
+    body: 'Better to be hated than ignored. The brand nobody talks about doesn\'t exist in the algorithm or out of it.',
+    source: 'Law 6 · The 48 Laws of Power',
   },
   {
-    law: 'Streaming gave you scale. Identity gives you a relationship.',
-    body: '10 million strangers is loneliness. 1,000 known fans is a movement.',
+    law: 'Get others to do the work for you, but always take the credit.',
+    body: 'The work that travels through other people\'s mouths is the work people believe. Earn that translation; never refuse it.',
+    source: 'Law 7 · The 48 Laws of Power',
   },
   {
-    law: 'Make the work the people who know you would die for.',
-    body: 'The rest of the audience comes through proximity to that intensity, not through compromise to it.',
+    law: 'Make other people come to you — use bait if necessary.',
+    body: 'The drop they line up for at midnight outsells the drop you push to them at 9am. Build the pull.',
+    source: 'Law 8 · The 48 Laws of Power',
   },
   {
-    law: 'The future of culture is who shows up, not who scrolls past.',
-    body: 'Showing up is the highest-cost engagement. Anyone who pays it is worth knowing by name.',
+    law: 'Win through your actions, never through argument.',
+    body: 'Releases beat tweets. Make the thing; let it argue for you.',
+    source: 'Law 9 · The 48 Laws of Power',
   },
   {
-    law: 'A creator who knows their audience doesn\'t need a manager.',
-    body: 'The middle layer existed because the artist couldn\'t see the listener. Once they can, the middle disappears.',
+    law: 'Avoid the unhappy and unlucky.',
+    body: 'Pain transfers. The collaborator stuck in a rut will drag your project into the same loop.',
+    source: 'Law 10 · The 48 Laws of Power',
   },
   {
-    law: 'Aesthetic is a filter, not a strategy.',
-    body: 'The look gets you noticed. The work keeps people. Don\'t confuse the two.',
+    law: 'Learn to keep people dependent on you.',
+    body: 'The artist who needs only one distributor is at that distributor\'s mercy. Build many doors out, and many doors in.',
+    source: 'Law 11 · The 48 Laws of Power',
   },
   {
-    law: 'The first 100 fans are the only ones who matter for the next 10,000.',
-    body: 'Build for them. They are the carriers.',
+    law: 'Use selective honesty and generosity to disarm.',
+    body: 'One real moment of generosity buys you ten transactions of distrust. Spend it where it counts.',
+    source: 'Law 12 · The 48 Laws of Power',
   },
   {
-    law: 'A platform is only as honest as the contact info it gives you.',
-    body: 'If you can\'t reach your people, you don\'t have a community. You have rented attention.',
+    law: 'When asking for help, appeal to people\'s self-interest.',
+    body: 'Nobody owes you anything. Show them what they get when they say yes — and you almost never hear no.',
+    source: 'Law 13 · The 48 Laws of Power',
   },
   {
-    law: 'Don\'t document the trend. Document the people building inside it.',
-    body: 'The trend will rot. The people you covered will outlive it and remember who saw them first.',
+    law: 'Pose as a friend; work as a spy.',
+    body: 'Every meeting is intel. The producer who listens for what people don\'t say is the producer who knows what\'s coming.',
+    source: 'Law 14 · The 48 Laws of Power',
   },
   {
-    law: 'Underground is a posture; the work is what makes it real.',
-    body: 'Anyone can dress in opposition. Few can sustain it long enough to become unavoidable.',
+    law: 'Crush your enemy totally.',
+    body: 'Don\'t half-kill a rumor, a knockoff, or a competitor — leave the room half-done and they regroup.',
+    source: 'Law 15 · The 48 Laws of Power',
   },
   {
-    law: 'Speed is overrated. Specificity wins.',
-    body: 'Being first to a noisy idea is forgettable. Being precise to a small one is permanent.',
+    law: 'Use absence to increase respect and honor.',
+    body: 'The artist who posts every day disappears. The one who vanishes for six months returns to a hungry room.',
+    source: 'Law 16 · The 48 Laws of Power',
   },
   {
-    law: 'Every viral moment was a private moment first.',
-    body: 'Cover the private rooms. The public ones cover themselves.',
+    law: 'Cultivate an air of unpredictability.',
+    body: 'A drop calendar nobody can guess is a drop calendar everyone watches.',
+    source: 'Law 17 · The 48 Laws of Power',
   },
   {
-    law: 'A drop without a list is a wish.',
-    body: 'If you don\'t know who to text when it launches, you launched at no one.',
+    law: 'Do not build fortresses to protect yourself — isolation is dangerous.',
+    body: 'The brand that hides from culture loses to the brand that talks to it daily.',
+    source: 'Law 18 · The 48 Laws of Power',
   },
   {
-    law: 'The fan is the publication.',
-    body: 'They share with a credibility no brand owns. Earn it; never demand it.',
+    law: 'Know who you\'re dealing with — do not offend the wrong person.',
+    body: 'Every city has its gatekeepers. Find out who they are before you make a move in their lane.',
+    source: 'Law 19 · The 48 Laws of Power',
   },
   {
-    law: 'Independence is not isolation.',
-    body: 'Stay outside the system; stay inside the conversation.',
+    law: 'Do not commit to anyone.',
+    body: 'Stay slightly loose. The artist who locks into one label, one city, one sound becomes that thing only.',
+    source: 'Law 20 · The 48 Laws of Power',
   },
   {
-    law: 'Don\'t build for the feed. Build for the bookmark.',
-    body: 'The feed forgets in 24 hours. The bookmark is forever.',
+    law: 'Play a sucker to catch a sucker — seem dumber than your mark.',
+    body: 'Sometimes the smartest move is to be underestimated. Let them think you don\'t see what you see.',
+    source: 'Law 21 · The 48 Laws of Power',
   },
   {
-    law: 'A creator without a city is a creator without weather.',
-    body: 'Be from somewhere specific. It\'s the only thing the internet can\'t flatten.',
+    law: 'Use the surrender tactic — transform weakness into power.',
+    body: 'Don\'t fight a bigger fight when stepping back lets you outlast them. Time is on the patient side.',
+    source: 'Law 22 · The 48 Laws of Power',
   },
   {
-    law: 'The interview matters more than the press release.',
-    body: 'A press release is a brand asking to be repeated. An interview is a person being remembered.',
+    law: 'Concentrate your forces.',
+    body: 'Spread thin across every platform, every city, every genre — you blur. Pick one room and own it first.',
+    source: 'Law 23 · The 48 Laws of Power',
   },
   {
-    law: 'Loyal small beats viral large, every quarter.',
-    body: 'The math always favors retention. Always.',
+    law: 'Play the perfect courtier.',
+    body: 'Every scene has its language. Learn it before you try to break it.',
+    source: 'Law 24 · The 48 Laws of Power',
   },
   {
-    law: 'If the work needs an explanation, it needs another draft.',
-    body: 'The audience\'s patience is the budget. Don\'t spend it on context.',
+    law: 'Re-create yourself.',
+    body: 'The artist who stays the same artist for ten years is the artist who lasts six. Reinvent before you\'re asked to.',
+    source: 'Law 25 · The 48 Laws of Power',
   },
   {
-    law: 'Be the source, not the syndication.',
-    body: 'Everyone reposts. Few are reposted.',
+    law: 'Keep your hands clean.',
+    body: 'Find the person who can take the fall for you — or keep your name off the things that go wrong.',
+    source: 'Law 26 · The 48 Laws of Power',
   },
   {
-    law: 'The next big brand was on a flyer two years ago.',
-    body: 'Pay attention to the flyer.',
+    law: 'Play on people\'s need to believe — create a cultlike following.',
+    body: 'Movements need rituals. Give your audience things to repeat, words to wear, days to anticipate.',
+    source: 'Law 27 · The 48 Laws of Power',
   },
   {
-    law: 'Followers are leased. Subscribers are bought. Members are kept.',
-    body: 'Each tier is a deeper commitment from both sides. Aim for the deepest one you can earn.',
+    law: 'Enter action with boldness.',
+    body: 'Half-measures broadcast doubt. If you\'re going to release, release like you meant to.',
+    source: 'Law 28 · The 48 Laws of Power',
   },
   {
-    law: 'A culture that can\'t introduce its people to each other is just an audience.',
-    body: 'Communities have edges and entry points. Audiences have neither.',
+    law: 'Plan all the way to the end.',
+    body: 'The drop is the easy part. The launch, the follow-up, the next thing — plan all three before announcing the first.',
+    source: 'Law 29 · The 48 Laws of Power',
   },
   {
-    law: 'You are not late.',
-    body: 'The thing being built today will look obvious in two years. Build it anyway.',
+    law: 'Make your accomplishments seem effortless.',
+    body: 'Hide the all-nighters. The performance of ease is what makes the work feel inevitable.',
+    source: 'Law 30 · The 48 Laws of Power',
+  },
+  {
+    law: 'Control the options — get others to play with the cards you deal.',
+    body: 'Don\'t ask "do you want this?" Ask "do you want option A or option B?"',
+    source: 'Law 31 · The 48 Laws of Power',
+  },
+  {
+    law: 'Play to people\'s fantasies.',
+    body: 'Sell the version of culture they wish they were part of, not the version they already are.',
+    source: 'Law 32 · The 48 Laws of Power',
+  },
+  {
+    law: 'Discover each person\'s thumbscrew.',
+    body: 'What does your collaborator actually want — money, credit, access, validation? Solve for that and they\'re with you.',
+    source: 'Law 33 · The 48 Laws of Power',
+  },
+  {
+    law: 'Be royal in your own fashion — act like a king to be treated like one.',
+    body: 'How you carry yourself in the room dictates what the room offers you.',
+    source: 'Law 34 · The 48 Laws of Power',
+  },
+  {
+    law: 'Master the art of timing.',
+    body: 'Right idea, wrong week = dead. The release calendar is half the work.',
+    source: 'Law 35 · The 48 Laws of Power',
+  },
+  {
+    law: 'Disdain things you cannot have — ignoring them is the best revenge.',
+    body: 'If a door won\'t open, stop knocking. Pour energy where the door is already cracked.',
+    source: 'Law 36 · The 48 Laws of Power',
+  },
+  {
+    law: 'Create compelling spectacles.',
+    body: 'A drop is a story, not a transaction. Stage the story and the transaction takes care of itself.',
+    source: 'Law 37 · The 48 Laws of Power',
+  },
+  {
+    law: 'Think as you like, but behave like others.',
+    body: 'Save the heretical opinion for the work. The personal feed isn\'t the place.',
+    source: 'Law 38 · The 48 Laws of Power',
+  },
+  {
+    law: 'Stir up waters to catch fish.',
+    body: 'Provoke a reaction; the people who care will surface. Silence converts no one.',
+    source: 'Law 39 · The 48 Laws of Power',
+  },
+  {
+    law: 'Despise the free lunch.',
+    body: 'Free is what attracts the audience that won\'t pay. Build for the people who give you something back.',
+    source: 'Law 40 · The 48 Laws of Power',
+  },
+  {
+    law: 'Avoid stepping into a great person\'s shoes.',
+    body: 'Inheriting another artist\'s audience is harder than building your own. Start fresh in a parallel lane.',
+    source: 'Law 41 · The 48 Laws of Power',
+  },
+  {
+    law: 'Strike the shepherd — the sheep will scatter.',
+    body: 'Take out the cultural gatekeeper, not the noise around them. The noise follows the gatekeeper.',
+    source: 'Law 42 · The 48 Laws of Power',
+  },
+  {
+    law: 'Work on the hearts and minds of others.',
+    body: 'Don\'t argue. Charm. Charisma converts faster than logic.',
+    source: 'Law 43 · The 48 Laws of Power',
+  },
+  {
+    law: 'Disarm and infuriate with the mirror effect.',
+    body: 'Show them themselves. The brand that holds up culture\'s reflection becomes inescapable.',
+    source: 'Law 44 · The 48 Laws of Power',
+  },
+  {
+    law: 'Preach change, but never reform too much at once.',
+    body: 'Push too hard against the existing scene and you become the enemy. Bend the scene gradually.',
+    source: 'Law 45 · The 48 Laws of Power',
+  },
+  {
+    law: 'Never appear too perfect.',
+    body: 'Show one flaw — the audience needs a way in. Polished beyond reproach reads as untrustworthy.',
+    source: 'Law 46 · The 48 Laws of Power',
+  },
+  {
+    law: 'Do not go past the mark you aimed for — in victory, stop.',
+    body: 'The artist who keeps pushing after the breakthrough overshoots and crashes. Land the win.',
+    source: 'Law 47 · The 48 Laws of Power',
+  },
+  {
+    law: 'Assume formlessness.',
+    body: 'The brand that can\'t be predicted can\'t be copied. Stay liquid; outlive every era.',
+    source: 'Law 48 · The 48 Laws of Power',
   },
 ];
 

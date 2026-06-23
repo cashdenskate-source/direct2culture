@@ -2,6 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { DailyLawFull } from '../components/DailyLaw.jsx';
 import LockedLawCalendar from '../components/LockedLawCalendar.jsx';
+import { lawsAttribution } from '../data/dailyLaws.js';
 import { pad, useCountdown } from '../hooks/useCountdown.js';
 
 function NextUnlockCountdown() {
@@ -67,6 +68,27 @@ export default function Today() {
           <Link to="/newsletter" className="btn-primary mt-6">
             Get The Culture Brief →
           </Link>
+        </div>
+
+        <div className="mt-16 border-t border-ink/10 pt-10">
+          <p className="eyebrow">Source</p>
+          <h3 className="mt-3 font-sans text-2xl font-bold tracking-tight">
+            Adapted from Robert Greene's <em>The 48 Laws of Power</em>.
+          </h3>
+          <p className="mt-3 max-w-2xl text-sm text-ink/70">
+            Each Law on this page uses Greene's principle as the headline,
+            paired with Direct2Culture commentary on how it applies to building
+            in culture today. For the originals, the case studies, and the
+            philosophy behind each Law — read the book.
+          </p>
+          <a
+            href={lawsAttribution.buyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost mt-6"
+          >
+            Get The 48 Laws of Power →
+          </a>
         </div>
       </section>
     </>
