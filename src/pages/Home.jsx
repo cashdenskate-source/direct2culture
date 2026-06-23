@@ -10,6 +10,7 @@ import NewsletterForm from '../components/NewsletterForm.jsx';
 import MarketPreview from '../components/MarketPreview.jsx';
 import HomeFeatured from '../components/home/HomeFeatured.jsx';
 import CreatorDome from '../components/home/CreatorDome.jsx';
+import CultureGlobeSection from '../components/home/CultureGlobeSection.jsx';
 import CultureTicker from '../components/CultureTicker.jsx';
 import SEO from '../components/SEO.jsx';
 import {
@@ -112,6 +113,8 @@ export default function Home() {
           ))}
         </div>
       </Section>
+
+      <CultureGlobeSection />
 
       <MarketPreview />
 
