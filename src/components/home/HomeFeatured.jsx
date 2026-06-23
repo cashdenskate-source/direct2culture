@@ -73,15 +73,15 @@ export default function HomeFeatured() {
             onClick={() => trackCTA('home_featured_story_click', { slug: featuredStory.slug })}
             className="group block"
           >
-            <p className="eyebrow">Featured Story</p>
-            <h2 className="mt-3 font-sans font-black tracking-tightest text-5xl md:text-7xl lg:text-8xl leading-[0.95] group-hover:underline">
+            <p className="eyebrow">Featured Story · Coming Soon</p>
+            <h2 className="mt-3 font-sans font-black tracking-tightest text-5xl md:text-7xl lg:text-8xl leading-[0.95] group-hover:underline blur-[10px] select-none transition-all duration-700 group-hover:blur-[3px]">
               {featuredStory.title}.
             </h2>
-            <p className="mt-6 max-w-2xl text-ink/75 text-xl md:text-2xl leading-snug">
+            <p className="mt-6 max-w-2xl text-ink/75 text-xl md:text-2xl leading-snug blur-[5px] select-none transition-all duration-700 group-hover:blur-[1.5px]">
               {featuredStory.subtitle}
             </p>
             <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.25em] text-ink">
-              {featuredStory.ctaLabel} →
+              Reveal Story →
             </p>
           </Link>
         </div>

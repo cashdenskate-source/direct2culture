@@ -5,7 +5,7 @@ import Aurora from './Aurora.jsx';
 export default function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-ink/10 bg-bone">
-      <Aurora opacity={0.9} blur={70} />
+      <Aurora opacity={0.85} blur={40} />
       <div className="pointer-events-none absolute inset-0 grid-lines opacity-30" />
 
       <div className="container-edge relative pt-14 pb-16 lg:pt-24 lg:pb-24">

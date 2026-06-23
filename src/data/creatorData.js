@@ -78,7 +78,9 @@ export const creators = [
     whyItMatters: 'Because what Neno makes is what the algorithm doesn\'t know how to surface yet.',
     whatsNext: 'A debut project, a film, and a tour built around the world the music describes.',
     status: 'featured',
-    isRevealed: true, // featured story — already live
+    isRevealed: false,
+    storyDebutDate: futureDate(1),
+    teaserText: 'The story behind the sound, the work, the movement. Coming soon.',
   }),
   story({ id: 'quay',          slug: 'quay',          name: 'Quay',          category: 'Skater',            city: 'Atlanta',      cultureScore: 78,
     isRevealed: false, storyDebutDate: futureDate(2), teaserText: 'A skater you should know. Story drops soon.',

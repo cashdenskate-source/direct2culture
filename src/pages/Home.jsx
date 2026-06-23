@@ -12,6 +12,8 @@ import HomeFeatured from '../components/home/HomeFeatured.jsx';
 import CreatorDome from '../components/home/CreatorDome.jsx';
 import CultureGlobeSection from '../components/home/CultureGlobeSection.jsx';
 import CultureTicker from '../components/CultureTicker.jsx';
+import WorldClocks from '../components/WorldClocks.jsx';
+import LazyMount from '../components/LazyMount.jsx';
 import SEO from '../components/SEO.jsx';
 import {
   cultureSignals,
@@ -26,10 +28,13 @@ export default function Home() {
   return (
     <>
       <SEO />
+      <WorldClocks />
       <CultureTicker />
       <Hero />
 
-      <CreatorDome />
+      <LazyMount minHeight={560} rootMargin="200px">
+        <CreatorDome />
+      </LazyMount>
 
       <HomeFeatured />
 
@@ -114,7 +119,9 @@ export default function Home() {
         </div>
       </Section>
 
-      <CultureGlobeSection />
+      <LazyMount minHeight={760} rootMargin="200px">
+        <CultureGlobeSection />
+      </LazyMount>
 
       <MarketPreview />
 
