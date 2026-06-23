@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { DailyLawRibbon } from '../components/DailyLaw.jsx';
 import Hero from '../components/Hero.jsx';
 import SectionTitle from '../components/SectionTitle.jsx';
 import CultureSignalCard from '../components/CultureSignalCard.jsx';
@@ -31,6 +32,7 @@ export default function Home() {
       <WorldClocks />
       <CultureTicker />
       <Hero />
+      <DailyLawRibbon />
 
       <section className="border-b border-ink/10 bg-bone">
         <div className="container-edge py-20 lg:py-28">

@@ -30,6 +30,7 @@ import AfterDrama from './pages/AfterDrama.jsx';
 import AdminCuration from './pages/admin/AdminCuration.jsx';
 import AdminStorySubmissions from './pages/admin/AdminStorySubmissions.jsx';
 import IdentityGraph from './pages/IdentityGraph.jsx';
+import Today from './pages/Today.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -139,6 +140,7 @@ export default function App() {
         <Route path="/d2c-pro" element={<PublicShell><D2CPro /></PublicShell>} />
         <Route path="/afterdrama" element={<PublicShell><AfterDrama /></PublicShell>} />
         <Route path="/identity-graph" element={<PublicShell><IdentityGraph /></PublicShell>} />
+        <Route path="/today" element={<PublicShell><Today /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
