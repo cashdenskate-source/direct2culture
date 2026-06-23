@@ -1,18 +1,33 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { DailyLawFull } from '../components/DailyLaw.jsx';
-import { dailyLaws, todaysLaw } from '../data/dailyLaws.js';
+import LockedLawCalendar from '../components/LockedLawCalendar.jsx';
+import { pad, useCountdown } from '../hooks/useCountdown.js';
+
+function NextUnlockCountdown() {
+  const now = new Date();
+  const tomorrowMidnight = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0,
+    0,
+    0,
+    0
+  );
+  const { hours, minutes, seconds, done } = useCountdown(tomorrowMidnight);
+  if (done) return null;
+  return (
+    <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-ash">
+      Next Law unlocks in{' '}
+      <span className="font-bold tabular-nums text-ink">
+        {pad(hours)}h {pad(minutes)}m {pad(seconds)}s
+      </span>
+    </p>
+  );
+}
 
 export default function Today() {
-  const today = new Date();
-  const { index } = todaysLaw(today);
-
-  // Preview the next 3 upcoming laws so visitors see this is a real calendar.
-  const upcoming = [1, 2, 3].map((offset) => {
-    const i = (index + offset) % dailyLaws.length;
-    return dailyLaws[i];
-  });
-
   return (
     <>
       <Helmet>
@@ -25,25 +40,22 @@ export default function Today() {
 
       <section className="container-edge py-16 lg:py-24">
         <DailyLawFull />
+        <NextUnlockCountdown />
 
         <div className="mt-16 border-t border-ink/10 pt-10">
           <p className="eyebrow">Coming up</p>
-          <ul className="mt-6 divide-y divide-ink/10 border border-ink/15">
-            {upcoming.map((entry, i) => (
-              <li key={entry.law} className="flex items-baseline gap-5 px-5 py-4">
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash shrink-0 w-12">
-                  +{i + 1}d
-                </span>
-                <span className="font-sans text-base text-ink/85">{entry.law}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
-            One Law. Every day. Forever.
+          <h2 className="mt-3 font-sans text-2xl font-bold tracking-tight">
+            The next seven Laws.
+          </h2>
+          <p className="mt-2 max-w-xl text-sm text-ink/70">
+            Locked until each day arrives. One Law a day. No skipping ahead.
           </p>
+          <div className="mt-6">
+            <LockedLawCalendar days={7} />
+          </div>
         </div>
 
-        <div className="mt-12 border-t border-ink/10 pt-10">
+        <div className="mt-16 border-t border-ink/10 pt-10">
           <p className="eyebrow">Want it in your inbox?</p>
           <h3 className="mt-3 font-sans text-2xl font-bold tracking-tight">
             Subscribe to The Culture Brief.
