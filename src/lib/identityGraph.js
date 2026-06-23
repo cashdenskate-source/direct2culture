@@ -1,0 +1,72 @@
+// Firestore-backed reads/writes for the Identity Graph.
+// Falls back gracefully when Firebase isn't configured (returns empty arrays).
+import { hasFirebaseConfig } from './firebase.js';
+import { createDoc, listAll, listWhere, setDocById } from './firestore.js';
+
+export const COLLECTIONS = {
+  USERS: 'fan_users',
+  EVENTS: 'fan_events',
+  CONTACT_REQUESTS: 'fan_contact_requests',
+  CONTACT_GRANTS: 'fan_contact_grants',
+};
+
+export async function fetchFanUsers() {
+  if (!hasFirebaseConfig) return [];
+  try {
+    return await listAll(COLLECTIONS.USERS, { orderField: 'createdAt' });
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchFanEvents() {
+  if (!hasFirebaseConfig) return [];
+  try {
+    return await listAll(COLLECTIONS.EVENTS, { orderField: 'timestamp' });
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchContactGrantsForCreator(creatorId) {
+  if (!hasFirebaseConfig || !creatorId) return [];
+  try {
+    return await listWhere(COLLECTIONS.CONTACT_GRANTS, [
+      ['creatorId', '==', creatorId],
+      ['status', '==', 'granted'],
+    ]);
+  } catch {
+    return [];
+  }
+}
+
+export async function recordFanEvent(payload) {
+  if (!hasFirebaseConfig) return null;
+  return await createDoc(COLLECTIONS.EVENTS, {
+    ...payload,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+export async function upsertFanUser(uid, data) {
+  if (!hasFirebaseConfig || !uid) return;
+  await setDocById(COLLECTIONS.USERS, uid, data);
+}
+
+export async function createContactRequest({ creatorId, creatorName, fanId, fanName, message = '' }) {
+  if (!hasFirebaseConfig) {
+    if (typeof console !== 'undefined') {
+      console.info('[identityGraph] mock contact request', { creatorId, fanId });
+    }
+    return { ok: true, mock: true };
+  }
+  const id = await createDoc(COLLECTIONS.CONTACT_REQUESTS, {
+    creatorId,
+    creatorName,
+    fanId,
+    fanName,
+    message,
+    status: 'pending',
+  });
+  return { ok: true, id };
+}

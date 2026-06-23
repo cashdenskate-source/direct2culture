@@ -1,15 +1,13 @@
+import { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import StatTile from '../components/StatTile.jsx';
-import {
-  totalFans,
-  musicLinkClicks,
-  storySaves,
-  topCityPercentages,
-} from '../lib/audience.js';
+import { useAudienceData } from '../hooks/useAudienceData.js';
+import { analyze } from '../lib/audience.js';
 
 export default function IdentityGraph() {
-  const cities = topCityPercentages();
+  const { users, events, loading, source } = useAudienceData();
+  const a = useMemo(() => analyze(users, events), [users, events]);
 
   return (
     <>
@@ -40,10 +38,16 @@ export default function IdentityGraph() {
           </p>
         </div>
 
+        {source === 'mock' && !loading && (
+          <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+            Demo data shown — real fan numbers appear here once signups begin.
+          </p>
+        )}
+
         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatTile label="Fans on D2C" value={totalFans()} sub="Accounts created" />
-          <StatTile label="Music link clicks" value={musicLinkClicks()} sub="Tracked on D2C" />
-          <StatTile label="Story saves" value={storySaves()} sub="Reads kept" />
+          <StatTile label="Fans on D2C" value={loading ? '…' : a.totalFans} sub="Accounts created" />
+          <StatTile label="Music link clicks" value={loading ? '…' : a.musicLinkClicks} sub="Tracked on D2C" />
+          <StatTile label="Story saves" value={loading ? '…' : a.storySaves} sub="Reads kept" />
         </div>
 
         <div className="mt-16">
@@ -52,12 +56,12 @@ export default function IdentityGraph() {
             Where the audience is.
           </h2>
           <ul className="mt-6 divide-y divide-ink/10 border border-ink/15">
-            {cities.length === 0 && (
+            {a.topCityPercentages.length === 0 && !loading && (
               <li className="px-5 py-6 font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
                 No data yet.
               </li>
             )}
-            {cities.map(({ city, pct }) => (
+            {a.topCityPercentages.map(({ city, pct }) => (
               <li key={city} className="flex items-center justify-between px-5 py-4">
                 <span className="font-sans text-base">{city}</span>
                 <span className="font-mono text-sm font-semibold">
