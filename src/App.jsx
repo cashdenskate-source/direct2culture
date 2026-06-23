@@ -44,6 +44,7 @@ import Profile from './pages/dashboard/Profile.jsx';
 import SettingsPage from './pages/dashboard/Settings.jsx';
 import Audience from './pages/dashboard/Audience.jsx';
 import FanProfile from './pages/dashboard/FanProfile.jsx';
+import Requests from './pages/dashboard/Requests.jsx';
 
 import AdminLayout from './components/admin/AdminLayout.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
@@ -176,6 +177,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="audience" element={<Audience />} />
           <Route path="fan/:id" element={<FanProfile />} />
+          <Route path="requests" element={<Requests />} />
           <Route path="submit-release" element={<SubmitRelease />} />
           <Route path="watchlist" element={<WatchlistPage />} />
           <Route path="submit-dj" element={<SubmitDJ />} />
