@@ -169,24 +169,29 @@ export default function Navbar() {
         <button
           aria-label="Menu"
           onClick={() => setOpen(!open)}
-          className="lg:hidden flex flex-col gap-[5px] p-2 -mr-2"
+          className="flex items-center gap-2 p-2 -mr-2"
         >
-          <span className={`block h-px w-6 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
-          <span className={`block h-px w-6 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
-          <span className={`block h-px w-6 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
+          <span className="flex flex-col gap-[5px]">
+            <span className={`block h-px w-6 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
+            <span className={`block h-px w-6 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
+            <span className={`block h-px w-6 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
+          </span>
+          <span className="hidden lg:inline font-mono text-[11px] uppercase tracking-[0.2em] text-ink">
+            {open ? 'Close' : 'Menu'}
+          </span>
         </button>
       </div>
 
       {open && (
-        <div className="lg:hidden border-t border-ink/10 bg-bone animate-fade-in">
-          <nav className="container-edge flex flex-col py-6 gap-1">
+        <div className="border-t border-ink/10 bg-bone animate-fade-in">
+          <nav className="container-edge flex flex-col py-6 gap-1 lg:grid lg:grid-cols-3 lg:gap-x-10 lg:gap-y-0 lg:py-8">
             {links.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 className={({ isActive }) =>
-                  `flex items-center justify-between py-3 border-b border-ink/10 font-sans text-2xl font-bold tracking-tighter ${
-                    isActive ? 'text-ink' : 'text-ash'
+                  `flex items-center justify-between py-3 border-b border-ink/10 font-sans text-2xl font-bold tracking-tighter lg:text-lg lg:py-3 ${
+                    isActive ? 'text-ink' : 'text-ash hover:text-ink'
                   }`
                 }
               >
