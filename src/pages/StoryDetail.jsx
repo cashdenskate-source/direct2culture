@@ -10,11 +10,14 @@ import { sendWebhook } from '../lib/webhooks.js';
 import {
   notifyRichskaterSignup, notifyBarelysainSignup,
 } from '../lib/notifications.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
+import { trackStoryView, trackWaitlistJoin, userFromAuth } from '../lib/audience.js';
 
 export default function StoryDetail() {
   const { slug } = useParams();
   const story = storyBySlug(slug);
   const [brand, setBrand] = useState(null);
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     if (!story?.ticker) return;
@@ -25,6 +28,18 @@ export default function StoryDetail() {
     })();
     return () => { cancelled = true; };
   }, [story?.ticker]);
+
+  // Identity Graph: log a storyViewed event when a logged-in fan opens this story.
+  useEffect(() => {
+    if (!story || !user) return;
+    const audUser = userFromAuth(user, profile);
+    if (!audUser) return;
+    trackStoryView({
+      user: audUser,
+      storyId: story.slug,
+      storyName: story.title || story.brand || story.slug,
+    });
+  }, [story?.slug, user?.uid]);
 
   if (!story) return <Navigate to="/stories" replace />;
 
@@ -45,6 +60,16 @@ export default function StoryDetail() {
       trackCTA('barelysain_drop_signup', { email: payload.email });
     } else {
       await submitDropSignup({ ...payload, kind: 'generic_story' });
+    }
+
+    // Identity Graph: attribute the waitlist join to the logged-in fan, if any.
+    const audUser = userFromAuth(user, profile);
+    if (audUser) {
+      trackWaitlistJoin({
+        user: audUser,
+        dropId: slug,
+        dropName: story.brand || story.title || slug,
+      }).catch(() => {});
     }
   }
 

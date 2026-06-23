@@ -48,6 +48,19 @@ export const ACTION_LABEL = {
 
 // --- Reads (pure) ---
 
+// Convert Firebase Auth user + Firestore profile into the shape the trackers expect.
+// Returns null if not logged in so callers can guard with `if (audUser) track…`.
+export function userFromAuth(authUser, profile) {
+  if (!authUser) return null;
+  return {
+    id: authUser.uid,
+    uid: authUser.uid,
+    name: profile?.name || authUser.displayName || '',
+    email: authUser.email || '',
+    city: profile?.city || '',
+  };
+}
+
 export function userById(users = [], id) {
   return users.find((u) => u.id === id) || null;
 }
