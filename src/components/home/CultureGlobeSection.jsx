@@ -4,31 +4,70 @@ import CultureGlobe from '../globe/CultureGlobe.jsx';
 import { subscribeCultureEvents, startSimulatedPings } from '../../lib/cultureEvents.js';
 import { SEED_CITIES } from '../../lib/cityCoords.js';
 
-// Convert (lat, lng) → cobe expects markers as { location: [lat, lng], size: number }
-const SEED_MARKERS = SEED_CITIES.map((c) => ({ location: [c.lat, c.lng], size: 0.06 }));
-
 const MAX_FEED = 12;
+const SEED_POINTS = SEED_CITIES.map((c) => ({
+  id: `seed_${c.label}`,
+  lat: c.lat,
+  lng: c.lng,
+  color: 'rgba(255,255,255,0.85)',
+  radius: 0.35,
+  altitude: 0.01,
+}));
+
+function colorToCss(c) {
+  const [r, g, b] = c;
+  return `rgb(${Math.round(r * 255)},${Math.round(g * 255)},${Math.round(b * 255)})`;
+}
+
+function pickRandom(arr, exclude) {
+  const opts = arr.filter((c) => !exclude || (c.lat !== exclude.lat || c.lng !== exclude.lng));
+  return opts[Math.floor(Math.random() * opts.length)] || arr[0];
+}
 
 export default function CultureGlobeSection() {
-  const [pings, setPings] = useState(SEED_MARKERS); // markers currently visible on globe
-  const [feed, setFeed] = useState([]);              // recent activity list
+  const [points, setPoints] = useState(SEED_POINTS);
+  const [arcs, setArcs] = useState([]);
+  const [feed, setFeed] = useState([]);
   const [totalToday, setTotalToday] = useState(0);
-  const queue = useRef([]);
-  const removalTimers = useRef([]);
+  const timers = useRef([]);
 
   function addPing(event) {
     if (event.lat == null || event.lng == null) return;
-    const marker = { location: [event.lat, event.lng], size: 0.12 };
-    setPings((m) => [...m, marker]);
-    // Remove the ping after 2.4s so the globe doesn't accumulate
-    const t = setTimeout(() => {
-      setPings((m) => {
-        const idx = m.findIndex((mm) => mm.location[0] === marker.location[0] && mm.location[1] === marker.location[1] && mm.size === 0.12);
-        if (idx < 0) return m;
-        const next = [...m]; next.splice(idx, 1); return next;
-      });
+    const css = colorToCss(event.color);
+    const pingId = `ping_${event.id}_${Math.random().toString(36).slice(2, 6)}`;
+
+    // Add bright pulsing point
+    const point = {
+      id: pingId,
+      lat: event.lat,
+      lng: event.lng,
+      color: css,
+      radius: 0.8,
+      altitude: 0.03,
+    };
+    setPoints((p) => [...p, point]);
+
+    // Add an arc from a random other D2C city to this destination
+    const source = pickRandom(SEED_CITIES, { lat: event.lat, lng: event.lng });
+    const arc = {
+      id: pingId + '_arc',
+      startLat: source.lat,
+      startLng: source.lng,
+      endLat: event.lat,
+      endLng: event.lng,
+      color: [css, 'rgba(255,255,255,0)'],
+      altitude: 0.25 + Math.random() * 0.15,
+    };
+    setArcs((a) => [...a, arc]);
+
+    // Cleanup after animations finish
+    const tPoint = setTimeout(() => {
+      setPoints((p) => p.filter((x) => x.id !== pingId));
     }, 2400);
-    removalTimers.current.push(t);
+    const tArc = setTimeout(() => {
+      setArcs((a) => a.filter((x) => x.id !== pingId + '_arc'));
+    }, 3000);
+    timers.current.push(tPoint, tArc);
 
     setFeed((f) => [event, ...f].slice(0, MAX_FEED));
     setTotalToday((n) => n + 1);
@@ -40,7 +79,7 @@ export default function CultureGlobeSection() {
     return () => {
       unsubReal();
       unsubSim();
-      removalTimers.current.forEach((t) => clearTimeout(t));
+      timers.current.forEach((t) => clearTimeout(t));
     };
   }, []);
 
@@ -62,12 +101,10 @@ export default function CultureGlobeSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 mt-12">
-          {/* Globe */}
-          <div className="flex items-center justify-center min-h-[400px]">
-            <CultureGlobe markers={pings} size={720} />
+          <div className="flex items-center justify-center min-h-[500px]">
+            <CultureGlobe points={points} arcs={arcs} size={720} />
           </div>
 
-          {/* Live feed */}
           <aside className="space-y-2">
             <div className="flex items-center gap-2 pb-3 border-b border-bone/15">
               <span className="inline-block h-2 w-2 rounded-full bg-green-400 animate-pulse" />
@@ -81,7 +118,7 @@ export default function CultureGlobeSection() {
                   <li key={e.id} className="flex items-start gap-2 text-sm">
                     <span
                       className="inline-block mt-1.5 h-1.5 w-1.5 rounded-full shrink-0"
-                      style={{ background: `rgb(${Math.round(e.color[0] * 255)},${Math.round(e.color[1] * 255)},${Math.round(e.color[2] * 255)})` }}
+                      style={{ background: colorToCss(e.color) }}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-sans text-bone truncate">{e.label}</p>
@@ -98,7 +135,7 @@ export default function CultureGlobeSection() {
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4">
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50">
-            Pings = real Firestore activity + simulated cultural pulse. Drag the globe to rotate.
+            Pings = real Firestore activity + simulated cultural pulse. Drag to rotate.
           </p>
           <Link to="/market" className="font-mono text-[11px] uppercase tracking-[0.25em] border border-bone/40 text-bone px-4 py-2 hover:bg-bone hover:text-ink transition-colors">
             Open Market →

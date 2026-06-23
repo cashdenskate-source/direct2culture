@@ -1,91 +1,75 @@
-import { useEffect, useRef } from 'react';
-import createGlobe from 'cobe';
+import { useEffect, useRef, useState } from 'react';
+import Globe from 'react-globe.gl';
 
-export default function CultureGlobe({ markers = [], size = 720 }) {
-  const canvasRef = useRef(null);
-  const markersRef = useRef(markers);
-  const phi = useRef(0);
-  const pointerInteracting = useRef(null);
-  const pointerInteractionMovement = useRef(0);
-  const widthRef = useRef(0);
+// Earth-at-night texture (free, hosted on unpkg as part of three-globe)
+const EARTH_NIGHT = '//unpkg.com/three-globe/example/img/earth-night.jpg';
+const BUMP_MAP = '//unpkg.com/three-globe/example/img/earth-topology.png';
 
-  // Keep markers ref fresh without re-creating the globe
-  useEffect(() => { markersRef.current = markers; }, [markers]);
+export default function CultureGlobe({ points = [], arcs = [], size = 720 }) {
+  const globeRef = useRef(null);
+  const wrapRef = useRef(null);
+  const [dims, setDims] = useState({ w: size, h: size });
 
-  // Create the globe ONCE on mount. Markers update via ref inside onRender.
+  // Auto-rotate
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    widthRef.current = canvas.offsetWidth || 600;
-
-    const ro = new ResizeObserver(() => {
-      if (canvas) widthRef.current = canvas.offsetWidth;
-    });
-    ro.observe(canvas);
-
-    const globe = createGlobe(canvas, {
-      devicePixelRatio: 2,
-      width: widthRef.current * 2,
-      height: widthRef.current * 2,
-      phi: 0,
-      theta: 0.3,
-      dark: 1,
-      diffuse: 1.2,
-      mapSamples: 16000,
-      mapBrightness: 6,
-      baseColor: [0.3, 0.3, 0.3],
-      markerColor: [1, 1, 1],
-      glowColor: [1, 1, 1],
-      markers: markersRef.current,
-      onRender: (state) => {
-        if (!pointerInteracting.current) phi.current += 0.004;
-        state.phi = phi.current + pointerInteractionMovement.current;
-        state.width = widthRef.current * 2;
-        state.height = widthRef.current * 2;
-        state.markers = markersRef.current; // live update without recreate
-      },
-    });
-
-    setTimeout(() => { canvas.style.opacity = '1'; }, 120);
-    return () => { globe.destroy(); ro.disconnect(); };
+    if (!globeRef.current) return;
+    const controls = globeRef.current.controls();
+    if (controls) {
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.6;
+      controls.enableZoom = false;
+    }
+    // Initial camera position
+    globeRef.current.pointOfView({ lat: 25, lng: -40, altitude: 2.2 }, 0);
   }, []);
 
+  // Responsive sizing
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const ro = new ResizeObserver(() => {
+      const w = Math.min(size, wrap.offsetWidth);
+      setDims({ w, h: w });
+    });
+    ro.observe(wrap);
+    return () => ro.disconnect();
+  }, [size]);
+
   return (
-    <div className="relative" style={{ maxWidth: size, aspectRatio: '1', margin: '0 auto', width: '100%' }}>
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          cursor: 'grab',
-          opacity: 0,
-          transition: 'opacity 1.2s ease',
-          contain: 'layout paint size',
-        }}
-        onPointerDown={(e) => {
-          pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
-          if (canvasRef.current) canvasRef.current.style.cursor = 'grabbing';
-        }}
-        onPointerUp={() => {
-          pointerInteracting.current = null;
-          if (canvasRef.current) canvasRef.current.style.cursor = 'grab';
-        }}
-        onPointerOut={() => {
-          pointerInteracting.current = null;
-          if (canvasRef.current) canvasRef.current.style.cursor = 'grab';
-        }}
-        onMouseMove={(e) => {
-          if (pointerInteracting.current !== null) {
-            const delta = e.clientX - pointerInteracting.current;
-            pointerInteractionMovement.current = delta / 200;
-          }
-        }}
-        onTouchMove={(e) => {
-          if (pointerInteracting.current !== null && e.touches[0]) {
-            const delta = e.touches[0].clientX - pointerInteracting.current;
-            pointerInteractionMovement.current = delta / 100;
-          }
-        }}
+    <div ref={wrapRef} style={{ maxWidth: size, aspectRatio: '1', margin: '0 auto', width: '100%' }}>
+      <Globe
+        ref={globeRef}
+        width={dims.w}
+        height={dims.h}
+        backgroundColor="rgba(0,0,0,0)"
+        globeImageUrl={EARTH_NIGHT}
+        bumpImageUrl={BUMP_MAP}
+        showAtmosphere
+        atmosphereColor="#ffffff"
+        atmosphereAltitude={0.18}
+
+        // Points / pings
+        pointsData={points}
+        pointLat="lat"
+        pointLng="lng"
+        pointColor="color"
+        pointAltitude={(d) => d.altitude ?? 0.01}
+        pointRadius={(d) => d.radius ?? 0.4}
+        pointsMerge={false}
+        pointsTransitionDuration={400}
+
+        // Arcs between cities
+        arcsData={arcs}
+        arcStartLat="startLat"
+        arcStartLng="startLng"
+        arcEndLat="endLat"
+        arcEndLng="endLng"
+        arcColor={(d) => d.color || ['rgba(255,255,255,0.9)', 'rgba(255,255,255,0.2)']}
+        arcDashLength={0.5}
+        arcDashGap={0.3}
+        arcDashAnimateTime={2200}
+        arcAltitude={(d) => d.altitude ?? 0.18}
+        arcStroke={0.45}
       />
     </div>
   );
