@@ -8,7 +8,7 @@ const BUMP_MAP = '//unpkg.com/three-globe/example/img/earth-topology.png';
 export default function CultureGlobe({ points = [], arcs = [], badges = [], size = 720 }) {
   const globeRef = useRef(null);
   const wrapRef = useRef(null);
-  const [dims, setDims] = useState({ w: size, h: size });
+  const [dims, setDims] = useState({ w: 1, h: 1 });
 
   // Auto-rotate
   useEffect(() => {
@@ -27,16 +27,18 @@ export default function CultureGlobe({ points = [], arcs = [], badges = [], size
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const ro = new ResizeObserver(() => {
-      const w = Math.min(size, wrap.offsetWidth);
+    const update = () => {
+      const w = Math.min(size, wrap.offsetWidth || 1);
       setDims({ w, h: w });
-    });
+    };
+    update();
+    const ro = new ResizeObserver(update);
     ro.observe(wrap);
     return () => ro.disconnect();
   }, [size]);
 
   return (
-    <div ref={wrapRef} style={{ maxWidth: size, aspectRatio: '1', margin: '0 auto', width: '100%' }}>
+    <div ref={wrapRef} style={{ maxWidth: size, aspectRatio: '1', margin: '0 auto', width: '100%', overflow: 'hidden' }}>
       <Globe
         ref={globeRef}
         width={dims.w}

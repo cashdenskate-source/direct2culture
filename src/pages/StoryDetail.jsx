@@ -99,6 +99,27 @@ export default function StoryDetail() {
         </div>
       )}
 
+      {/* Gallery */}
+      {story.gallery && story.gallery.length > 0 && (
+        <section className="bg-bone">
+          <div className="container-edge py-12 lg:py-16">
+            <p className="eyebrow">Visual</p>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {story.gallery.map((g, i) => (
+                <figure key={i} className="border border-ink/10 overflow-hidden bg-ink/5">
+                  <img src={g.src} alt={g.alt || ''} className="w-full h-auto block" loading="lazy" />
+                  {g.caption && (
+                    <figcaption className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ash border-t border-ink/10">
+                      {g.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Body sections */}
       <article className="container-edge py-16 lg:py-24 max-w-3xl space-y-12">
         {story.bodySections.map((sec) => (

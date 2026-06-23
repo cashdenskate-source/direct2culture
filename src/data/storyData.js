@@ -43,6 +43,10 @@ export const stories = [
       { label: 'Get Ticket Updates', kind: 'signup', link: '#richskater-signup' },
       { label: 'Submit Skate Footage', kind: 'link', link: '/tell-your-story?ref=richskater' },
     ],
+    gallery: [
+      { src: '/stories/richskater/flyer-march-22.jpg', alt: 'RichSkater Gen Flyer · March 22', caption: 'Gen Flyer · March 22' },
+      { src: '/stories/richskater/skate-comp-cover.jpg', alt: 'RichSkater Skate Comp Front Cover', caption: 'Skate Comp · Front Cover' },
+    ],
   },
   {
     id: 'barelysain',
@@ -81,6 +85,10 @@ export const stories = [
       { label: 'Join The Next Drop', kind: 'signup', link: '#barelysain-signup' },
       { label: 'Get Drop Alerts', kind: 'signup', link: '#barelysain-signup' },
       { label: 'Submit For Styling', kind: 'link', link: '/tell-your-story?ref=barelysain' },
+    ],
+    gallery: [
+      { src: '/stories/barelysain/653a1373.jpg', alt: 'BarelySain editorial', caption: 'Editorial' },
+      { src: '/stories/barelysain/2024-05-08.jpg', alt: 'BarelySain campaign 2024-05', caption: 'Campaign · 05.08' },
     ],
   },
 ];

@@ -80,6 +80,7 @@ import AdminBrands from './pages/admin/AdminBrands.jsx';
 
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import { RequireAuth, RequireRole, RedirectIfAuthed } from './components/RouteGuard.jsx';
+import Aurora from './components/Aurora.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -91,9 +92,12 @@ function ScrollToTop() {
 
 function PublicShell({ children }) {
   return (
-    <div className="min-h-screen bg-bone text-ink">
+    <div className="min-h-screen bg-bone text-ink overflow-x-hidden relative">
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <Aurora opacity={0.45} blur={90} />
+      </div>
       <Navbar />
-      <main>{children}</main>
+      <main className="relative">{children}</main>
       <Footer />
     </div>
   );
