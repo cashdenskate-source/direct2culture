@@ -173,6 +173,16 @@ export const drops = [
     cta: 'Listen Now',
     accent: 'DR / 06',
   },
+  {
+    id: 'dr-07',
+    brand: 'BarelySain',
+    name: 'BarelySain Hoodie',
+    date: '2026-06-15',
+    category: 'Fashion',
+    status: 'sold out',
+    cta: 'Join Waitlist',
+    accent: 'DR / 07',
+  },
 ];
 
 export const events = [

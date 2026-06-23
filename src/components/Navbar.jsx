@@ -164,21 +164,29 @@ export default function Navbar() {
               </div>
             </>
           )}
+
+          <button
+            aria-label="Menu"
+            onClick={() => setOpen(!open)}
+            className="flex items-center gap-2 border-l border-ink/15 pl-4 font-mono text-[11px] uppercase tracking-[0.2em] text-ink hover:opacity-70"
+          >
+            <span className="flex flex-col gap-[5px]">
+              <span className={`block h-px w-5 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
+              <span className={`block h-px w-5 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
+              <span className={`block h-px w-5 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
+            </span>
+            <span>{open ? 'Close' : 'Menu'}</span>
+          </button>
         </div>
 
         <button
           aria-label="Menu"
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 p-2 -mr-2"
+          className="lg:hidden flex flex-col gap-[5px] p-2 -mr-2"
         >
-          <span className="flex flex-col gap-[5px]">
-            <span className={`block h-px w-6 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
-            <span className={`block h-px w-6 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
-            <span className={`block h-px w-6 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
-          </span>
-          <span className="hidden lg:inline font-mono text-[11px] uppercase tracking-[0.2em] text-ink">
-            {open ? 'Close' : 'Menu'}
-          </span>
+          <span className={`block h-px w-6 bg-ink transition-transform ${open ? 'translate-y-[6px] rotate-45' : ''}`} />
+          <span className={`block h-px w-6 bg-ink transition-opacity ${open ? 'opacity-0' : ''}`} />
+          <span className={`block h-px w-6 bg-ink transition-transform ${open ? '-translate-y-[6px] -rotate-45' : ''}`} />
         </button>
       </div>
 
