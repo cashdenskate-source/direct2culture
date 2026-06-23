@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, onSnapshot } from 'firebase/firestore';
+import AppStoreButton from '../../components/AppStoreButton.jsx';
 import PageHeader from '../../components/PageHeader.jsx';
 import SEO from '../../components/SEO.jsx';
 import MarketTabs from '../../components/market/MarketTabs.jsx';
@@ -138,12 +139,8 @@ function SocialLinks({ brand }) {
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Get the App</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {apps.map((l) => (
-              <a key={l.label} href={l.url} target="_blank" rel="noopener noreferrer"
-                className="border border-ink bg-ink text-bone px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity">
-                {l.label} ↓
-              </a>
-            ))}
+            <AppStoreButton platform="apple" url={brand.iosAppURL} />
+            <AppStoreButton platform="google" url={brand.androidAppURL} />
           </div>
         </div>
       )}

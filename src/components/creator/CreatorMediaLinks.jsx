@@ -1,3 +1,5 @@
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { trackMusicClick, userFromAuth } from '../../lib/audience.js';
 import { trackCTA } from '../../lib/tracking.js';
 
 const PLATFORMS = [
@@ -10,6 +12,8 @@ const PLATFORMS = [
   { key: 'instagram', label: 'Follow on Instagram' },
   { key: 'website', label: 'Website' },
 ];
+
+const MUSIC_KEYS = new Set(['spotifyURL', 'appleMusicURL', 'soundcloudURL', 'audiomackURL']);
 
 function spotifyEmbed(url) {
   if (!url) return null;
@@ -36,10 +40,23 @@ function youtubeEmbed(url) {
 
 export default function CreatorMediaLinks({ creator }) {
   const links = PLATFORMS.filter((p) => creator[p.key]);
+  const { user, profile } = useAuth();
   if (!links.length) return null;
 
   const sEmbed = spotifyEmbed(creator.spotifyURL);
   const yEmbed = youtubeEmbed(creator.youtubeURL);
+
+  function onMediaClick(p) {
+    trackCTA(`creator_media_${p.key}`, { slug: creator.slug });
+    if (!MUSIC_KEYS.has(p.key)) return;
+    const audUser = userFromAuth(user, profile);
+    if (!audUser) return;
+    trackMusicClick({
+      user: audUser,
+      songId: `${creator.slug}_${p.key}`,
+      songName: `${creator.name} on ${p.label.replace('Listen on ', '').replace('Watch on ', '')}`,
+    }).catch(() => {});
+  }
 
   return (
     <section className="border-y border-ink/10 bg-ink/[0.02]">
@@ -52,7 +69,7 @@ export default function CreatorMediaLinks({ creator }) {
               href={creator[p.key]}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => trackCTA(`creator_media_${p.key}`, { slug: creator.slug })}
+              onClick={() => onMediaClick(p)}
               className="border border-ink px-3 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-ink hover:bg-ink hover:text-bone transition-colors"
             >
               {p.label} →

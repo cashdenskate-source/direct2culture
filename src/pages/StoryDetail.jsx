@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
+import AppStoreButton from '../components/AppStoreButton.jsx';
 import SEO from '../components/SEO.jsx';
 import StorySignupForm from '../components/story/StorySignupForm.jsx';
 import { storyBySlug } from '../data/storyData.js';
@@ -10,11 +11,14 @@ import { sendWebhook } from '../lib/webhooks.js';
 import {
   notifyRichskaterSignup, notifyBarelysainSignup,
 } from '../lib/notifications.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
+import { trackStoryView, trackWaitlistJoin, userFromAuth } from '../lib/audience.js';
 
 export default function StoryDetail() {
   const { slug } = useParams();
   const story = storyBySlug(slug);
   const [brand, setBrand] = useState(null);
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     if (!story?.ticker) return;
@@ -25,6 +29,18 @@ export default function StoryDetail() {
     })();
     return () => { cancelled = true; };
   }, [story?.ticker]);
+
+  // Identity Graph: log a storyViewed event when a logged-in fan opens this story.
+  useEffect(() => {
+    if (!story || !user) return;
+    const audUser = userFromAuth(user, profile);
+    if (!audUser) return;
+    trackStoryView({
+      user: audUser,
+      storyId: story.slug,
+      storyName: story.title || story.brand || story.slug,
+    });
+  }, [story?.slug, user?.uid]);
 
   if (!story) return <Navigate to="/stories" replace />;
 
@@ -45,6 +61,16 @@ export default function StoryDetail() {
       trackCTA('barelysain_drop_signup', { email: payload.email });
     } else {
       await submitDropSignup({ ...payload, kind: 'generic_story' });
+    }
+
+    // Identity Graph: attribute the waitlist join to the logged-in fan, if any.
+    const audUser = userFromAuth(user, profile);
+    if (audUser) {
+      trackWaitlistJoin({
+        user: audUser,
+        dropId: slug,
+        dropName: story.brand || story.title || slug,
+      }).catch(() => {});
     }
   }
 
@@ -234,18 +260,18 @@ function BrandLinks({ brand }) {
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Get the App</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {apps.map((l) => (
-              <a
-                key={l.label}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackCTA(`story_app_${l.label.toLowerCase().replace(/\s+/g, '_')}`, { ticker: brand.ticker })}
-                className="bg-ink text-bone px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity"
-              >
-                {l.label} ↓
-              </a>
-            ))}
+            <AppStoreButton
+              platform="apple"
+              url={brand.iosAppURL}
+              trackingKey="story_app_apple_app_store"
+              trackingProps={{ ticker: brand.ticker }}
+            />
+            <AppStoreButton
+              platform="google"
+              url={brand.androidAppURL}
+              trackingKey="story_app_google_play"
+              trackingProps={{ ticker: brand.ticker }}
+            />
           </div>
         </div>
       )}

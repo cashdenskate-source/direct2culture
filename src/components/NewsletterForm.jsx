@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { submitToCollection } from '../lib/firebase.js';
+import { trackNewsletterSignup, userFromAuth } from '../lib/audience.js';
 
 export default function NewsletterForm({ variant = 'light' }) {
   const [email, setEmail] = useState('');
   const [state, setState] = useState({ status: 'idle', message: '' });
+  const { user, profile } = useAuth();
 
   const isDark = variant === 'dark';
 
@@ -16,6 +19,16 @@ export default function NewsletterForm({ variant = 'light' }) {
     setState({ status: 'loading', message: '' });
     try {
       await submitToCollection('newsletter', { email, source: 'site' });
+
+      const audUser = userFromAuth(user, profile);
+      if (audUser) {
+        trackNewsletterSignup({
+          user: audUser,
+          newsletterId: 'culture_brief',
+          newsletterName: 'Culture Brief',
+        }).catch(() => {});
+      }
+
       setState({ status: 'success', message: 'You are on the list. Watch your inbox.' });
       setEmail('');
     } catch {

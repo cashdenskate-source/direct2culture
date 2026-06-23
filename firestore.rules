@@ -166,5 +166,67 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow update, delete: if false;
     }
+
+    // =====================================================================
+    // IDENTITY GRAPH — fan profiles, engagement events, contact consent.
+    // Tier-1 model: name + city are visible to creators by default.
+    // Email/phone live on users/{uid} (owner-only) and are surfaced to
+    // creators only via the fan_contact_grants flow.
+    // =====================================================================
+
+    // FAN_USERS — public-safe identity graph profile (name, city, instagram,
+    // interests, favorites). Created at signup, owned by the fan.
+    // NOTE: any signed-in user can list these so the creator dashboard works.
+    // Sensitive contact fields must NOT be stored here long-term — they go
+    // on users/{uid} which is owner-only.
+    match /fan_users/{userId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+                      && uid() == userId
+                      && request.resource.data.uid == userId;
+      allow update: if signedIn() && uid() == userId;
+      allow delete: if isAdmin() || (signedIn() && uid() == userId);
+    }
+
+    // FAN_EVENTS — engagement attribution. Each doc is attributed to a single
+    // fan (userId). Dashboard reads aggregate across all events.
+    match /fan_events/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+                      && request.resource.data.userId == uid();
+      allow update, delete: if isAdmin();
+    }
+
+    // FAN_CONTACT_REQUESTS — creator asks a fan for email/phone access.
+    // Only the requester and the target can see it; only the target can
+    // change status (accept/decline) without touching the rest of the doc.
+    match /fan_contact_requests/{id} {
+      allow read: if signedIn() && (
+        resource.data.creatorId == uid() || resource.data.fanId == uid()
+      );
+      allow create: if signedIn()
+                      && request.resource.data.creatorId == uid()
+                      && request.resource.data.status == 'pending';
+      allow update: if signedIn()
+                      && resource.data.fanId == uid()
+                      && request.resource.data.creatorId == resource.data.creatorId
+                      && request.resource.data.fanId == resource.data.fanId
+                      && request.resource.data.status in ['accepted', 'declined'];
+      allow delete: if isAdmin();
+    }
+
+    // FAN_CONTACT_GRANTS — the fan's permission for a specific creator to
+    // see their contact. Created by the fan accepting a request; revocable
+    // by the fan from settings.
+    match /fan_contact_grants/{id} {
+      allow read: if signedIn() && (
+        resource.data.creatorId == uid() || resource.data.fanId == uid()
+      );
+      allow create: if signedIn()
+                      && request.resource.data.fanId == uid()
+                      && request.resource.data.status == 'granted';
+      allow update: if signedIn() && resource.data.fanId == uid();
+      allow delete: if isAdmin() || (signedIn() && resource.data.fanId == uid());
+    }
   }
 }

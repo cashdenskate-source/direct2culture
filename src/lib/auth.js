@@ -8,10 +8,26 @@ import {
 import { doc, setDoc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { auth, db, storage } from './firebase.js';
+import { COLLECTIONS } from './identityGraph.js';
 import { notifyNewSignup } from './notifications.js';
 import { sendWebhook } from './webhooks.js';
 
-export async function signUpCustomer({ email, password, name, phone, photoFile, userType }) {
+export async function signUpCustomer({
+  email,
+  password,
+  name,
+  phone,
+  photoFile,
+  userType,
+  city = '',
+  instagram = '',
+  tosAccepted = false,
+  identityGraphOptIn = true,
+}) {
+  if (!tosAccepted) {
+    throw Object.assign(new Error('Terms must be accepted to create an account.'), { code: 'tos/not-accepted' });
+  }
+
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   if (name) {
     await updateProfile(cred.user, { displayName: name });
@@ -33,7 +49,33 @@ export async function signUpCustomer({ email, password, name, phone, photoFile, 
     role: 'customer',
     createdAt: serverTimestamp(),
     newsletterOptIn: true,
+    city,
+    instagram,
+    tosAcceptedAt: serverTimestamp(),
+    identityGraphOptIn,
   });
+
+  // Identity Graph fan doc — keyed by uid, mirrors the consent profile.
+  if (identityGraphOptIn) {
+    await setDoc(doc(db, COLLECTIONS.USERS, cred.user.uid), {
+      id: cred.user.uid,
+      uid: cred.user.uid,
+      name: name || '',
+      email,
+      phone: phone || '',
+      city,
+      instagram,
+      interests: [],
+      favoriteArtists: [],
+      favoriteBrands: [],
+      favoriteDJs: [],
+      favoriteCreators: [],
+      newsletterPreferences: ['Culture Brief'],
+      tosAcceptedAt: serverTimestamp(),
+      createdAt: serverTimestamp(),
+    });
+  }
+
   // Fire-and-forget notification + webhook (stubs by default)
   const profile = { uid: cred.user.uid, email, name, userType };
   notifyNewSignup(profile).catch(() => {});

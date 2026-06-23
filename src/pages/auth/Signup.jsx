@@ -6,7 +6,18 @@ import { signUpCustomer } from '../../lib/auth.js';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirm: '', userType: '' });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    city: '',
+    instagram: '',
+    password: '',
+    confirm: '',
+    userType: '',
+    tosAccepted: false,
+    identityGraphOptIn: true,
+  });
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState('');
   const [state, setState] = useState({ status: 'idle', message: '' });
@@ -35,6 +46,8 @@ export default function Signup() {
     if (!form.userType) return setState({ status: 'error', message: 'Pick what you are.' });
     if (form.password.length < 8) return setState({ status: 'error', message: 'Password must be at least 8 characters.' });
     if (form.password !== form.confirm) return setState({ status: 'error', message: 'Passwords do not match.' });
+    if (!form.tosAccepted) return setState({ status: 'error', message: 'You must accept the Terms and Privacy Policy.' });
+    if (!form.identityGraphOptIn) return setState({ status: 'error', message: 'You must opt in to the Identity Graph to use D2C.' });
 
     setState({ status: 'loading', message: '' });
     try {
@@ -43,8 +56,12 @@ export default function Signup() {
         password: form.password,
         name: form.name,
         phone: form.phone,
+        city: form.city,
+        instagram: form.instagram,
         userType: form.userType,
         photoFile,
+        tosAccepted: form.tosAccepted,
+        identityGraphOptIn: form.identityGraphOptIn,
       });
       navigate(role === 'admin' ? '/admin/dashboard' : '/dashboard', { replace: true });
     } catch (err) {
@@ -94,6 +111,16 @@ export default function Signup() {
               ))}
             </div>
           </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <label className="field-label">City <span className="text-ash normal-case">(powers your city stats)</span></label>
+              <input value={form.city} onChange={(e) => update('city', e.target.value)} className="field" placeholder="New York" />
+            </div>
+            <div>
+              <label className="field-label">Instagram <span className="text-ash normal-case">(optional)</span></label>
+              <input value={form.instagram} onChange={(e) => update('instagram', e.target.value)} className="field" placeholder="@handle" />
+            </div>
+          </div>
           <div>
             <label className="field-label">Phone <span className="text-ash normal-case">(optional)</span></label>
             <input type="tel" value={form.phone} onChange={(e) => update('phone', e.target.value)} className="field" placeholder="+1 555 555 5555" />
@@ -124,6 +151,45 @@ export default function Signup() {
             <label className="field-label">Confirm Password</label>
             <input type="password" required value={form.confirm} onChange={(e) => update('confirm', e.target.value)} className="field" placeholder="Type it again" />
           </div>
+
+          <div className="space-y-3 border-t border-ink/10 pt-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Consent</p>
+
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.tosAccepted}
+                onChange={(e) => update('tosAccepted', e.target.checked)}
+                className="mt-1 h-4 w-4 shrink-0 accent-ink"
+              />
+              <span className="text-[12px] leading-relaxed text-ink/80">
+                I agree to the{' '}
+                <Link to="/terms" target="_blank" className="text-ink underline">
+                  Terms
+                </Link>{' '}
+                and{' '}
+                <Link to="/privacy" target="_blank" className="text-ink underline">
+                  Privacy Policy
+                </Link>
+                .
+              </span>
+            </label>
+
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.identityGraphOptIn}
+                onChange={(e) => update('identityGraphOptIn', e.target.checked)}
+                className="mt-1 h-4 w-4 shrink-0 accent-ink"
+              />
+              <span className="text-[12px] leading-relaxed text-ink/80">
+                Join the <strong>Direct2Culture Identity Graph</strong>. Your name and city
+                are visible to creators you engage with on D2C. Your email and phone stay
+                private — creators must request and receive your consent to see them.
+              </span>
+            </label>
+          </div>
+
           <button type="submit" disabled={state.status === 'loading'} className="btn-primary w-full disabled:opacity-50">
             {state.status === 'loading' ? 'Creating…' : 'Create Account →'}
           </button>
@@ -142,6 +208,7 @@ function friendly(code) {
     case 'auth/invalid-email': return 'Email format is invalid.';
     case 'auth/weak-password': return 'Password is too weak.';
     case 'auth/operation-not-allowed': return 'Email/password sign-in is disabled in Firebase Console.';
+    case 'tos/not-accepted': return 'You must accept the Terms to create an account.';
     default: return 'Could not create account.';
   }
 }

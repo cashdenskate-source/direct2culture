@@ -1,6 +1,13 @@
-// Identity Graph engagement layer. In-memory mock; swap for Firestore later.
+// Identity Graph engagement layer.
+// Pure analytics functions + Firestore-backed trackers.
+// Consumers load users + events via useAudienceData() and pass them in here.
+
+import {
+  COLLECTIONS,
+  createContactRequest,
+  recordFanEvent,
+} from './identityGraph.js';
 import { trackCTA } from './tracking.js';
-import { mockFans, seedEvents } from '../data/identityGraphMock.js';
 
 export const ACTION = {
   STORY_VIEWED: 'storyViewed',
@@ -39,112 +46,142 @@ export const ACTION_LABEL = {
   newsletterSubscribed: 'Newsletter subscribed',
 };
 
-const users = [...mockFans];
-const events = [...seedEvents];
-let seq = 0;
-const newId = () => `evt_${Date.now()}_${seq++}`;
+// --- Reads (pure) ---
 
-function record({ user, entityType, entityId, entityName, actionType, platform = 'web' }) {
-  const e = {
-    id: newId(),
-    userId: user.id,
-    userName: user.name,
+// Convert Firebase Auth user + Firestore profile into the shape the trackers expect.
+// Returns null if not logged in so callers can guard with `if (audUser) track…`.
+export function userFromAuth(authUser, profile) {
+  if (!authUser) return null;
+  return {
+    id: authUser.uid,
+    uid: authUser.uid,
+    name: profile?.name || authUser.displayName || '',
+    email: authUser.email || '',
+    city: profile?.city || '',
+  };
+}
+
+export function userById(users = [], id) {
+  return users.find((u) => u.id === id) || null;
+}
+
+export function eventsForUser(events = [], userId) {
+  return events
+    .filter((e) => e.userId === userId)
+    .sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+}
+
+// Tier-1 enforcement: strip email/phone unless the viewer has been granted contact.
+export function maskUserContact(user, { canSeeContact = false } = {}) {
+  if (!user) return null;
+  if (canSeeContact) return user;
+  return { ...user, email: null, phone: null };
+}
+
+// --- Analytics (pure) ---
+
+export function analyze(users = [], events = []) {
+  const totalFans = users.length;
+
+  const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const newFansThisWeek = users.filter(
+    (u) => new Date(u.createdAt).getTime() >= weekCutoff
+  ).length;
+
+  const countByAction = (action) =>
+    events.filter((e) => e.actionType === action).length;
+
+  const cityCounts = {};
+  for (const u of users) cityCounts[u.city] = (cityCounts[u.city] || 0) + 1;
+  const total = users.length || 1;
+  const topCityPercentages = Object.entries(cityCounts)
+    .map(([city, n]) => ({ city, pct: (n / total) * 100, count: n }))
+    .sort((a, b) => b.pct - a.pct);
+
+  const engagementCounts = {};
+  for (const e of events)
+    engagementCounts[e.userId] = (engagementCounts[e.userId] || 0) + 1;
+  const mostEngagedUsers = Object.entries(engagementCounts)
+    .map(([userId, count]) => ({ user: userById(users, userId), count }))
+    .filter((row) => row.user)
+    .sort((a, b) => b.count - a.count);
+
+  function topByAction(action) {
+    const counts = {};
+    for (const e of events.filter((ev) => ev.actionType === action)) {
+      counts[e.entityName] = (counts[e.entityName] || 0) + 1;
+    }
+    return Object.entries(counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+  }
+
+  return {
+    totalFans,
+    newFansThisWeek,
+    musicLinkClicks: countByAction(ACTION.MUSIC_LINK_CLICKED),
+    storySaves: countByAction(ACTION.STORY_SAVED),
+    storyViews: countByAction(ACTION.STORY_VIEWED),
+    waitlistSignups: countByAction(ACTION.DROP_WAITLIST_JOINED),
+    newsletterSubscribers: countByAction(ACTION.NEWSLETTER_SUBSCRIBED),
+    topCityPercentages,
+    mostEngagedUsers,
+    topStoriesRead: topByAction(ACTION.STORY_VIEWED),
+    topSongsClicked: topByAction(ACTION.MUSIC_LINK_CLICKED),
+    topCreatorsFollowed: topByAction(ACTION.CREATOR_FOLLOWED),
+    topBrandsFollowed: topByAction(ACTION.BRAND_FOLLOWED),
+  };
+}
+
+// --- Trackers (write to Firestore + ga/cta stub) ---
+
+async function track({ user, entityType, entityId, entityName, actionType, platform = 'web' }) {
+  if (!user) return;
+  const payload = {
+    userId: user.id || user.uid,
+    userName: user.name || '',
     entityType,
     entityId,
     entityName,
     actionType,
     platform,
-    city: user.city,
-    timestamp: new Date(),
+    city: user.city || '',
   };
-  events.push(e);
-  trackCTA(`engagement_${actionType}`, { userId: user.id, entityType, entityId, entityName });
-  return e;
+  trackCTA(`engagement_${actionType}`, payload);
+  await recordFanEvent(payload);
 }
 
-export function trackStoryView({ user, storyId, storyName, platform }) {
-  return record({ user, entityType: ENTITY.STORY, entityId: storyId, entityName: storyName, actionType: ACTION.STORY_VIEWED, platform });
+export const trackStoryView = ({ user, storyId, storyName, platform }) =>
+  track({ user, entityType: ENTITY.STORY, entityId: storyId, entityName: storyName, actionType: ACTION.STORY_VIEWED, platform });
+
+export const trackStorySave = ({ user, storyId, storyName, platform }) =>
+  track({ user, entityType: ENTITY.STORY, entityId: storyId, entityName: storyName, actionType: ACTION.STORY_SAVED, platform });
+
+export const trackCreatorFollow = ({ user, creatorId, creatorName, platform }) =>
+  track({ user, entityType: ENTITY.CREATOR, entityId: creatorId, entityName: creatorName, actionType: ACTION.CREATOR_FOLLOWED, platform });
+
+export const trackMusicClick = ({ user, songId, songName, platform }) =>
+  track({ user, entityType: ENTITY.SONG, entityId: songId, entityName: songName, actionType: ACTION.MUSIC_LINK_CLICKED, platform });
+
+export const trackWaitlistJoin = ({ user, dropId, dropName, platform }) =>
+  track({ user, entityType: ENTITY.DROP, entityId: dropId, entityName: dropName, actionType: ACTION.DROP_WAITLIST_JOINED, platform });
+
+export const trackNewsletterSignup = ({ user, newsletterId, newsletterName, platform }) =>
+  track({ user, entityType: ENTITY.NEWSLETTER, entityId: newsletterId, entityName: newsletterName, actionType: ACTION.NEWSLETTER_SUBSCRIBED, platform });
+
+// --- Consent ---
+
+export async function requestFanContact({ creator, fan, message }) {
+  return await createContactRequest({
+    creatorId: creator?.id || creator?.uid || 'creator_unknown',
+    creatorName: creator?.name || 'Creator',
+    fanId: fan?.id || fan?.uid,
+    fanName: fan?.name || '',
+    message,
+  });
 }
 
-export function trackStorySave({ user, storyId, storyName, platform }) {
-  return record({ user, entityType: ENTITY.STORY, entityId: storyId, entityName: storyName, actionType: ACTION.STORY_SAVED, platform });
-}
-
-export function trackCreatorFollow({ user, creatorId, creatorName, platform }) {
-  return record({ user, entityType: ENTITY.CREATOR, entityId: creatorId, entityName: creatorName, actionType: ACTION.CREATOR_FOLLOWED, platform });
-}
-
-export function trackMusicClick({ user, songId, songName, platform }) {
-  return record({ user, entityType: ENTITY.SONG, entityId: songId, entityName: songName, actionType: ACTION.MUSIC_LINK_CLICKED, platform });
-}
-
-export function trackWaitlistJoin({ user, dropId, dropName, platform }) {
-  return record({ user, entityType: ENTITY.DROP, entityId: dropId, entityName: dropName, actionType: ACTION.DROP_WAITLIST_JOINED, platform });
-}
-
-export function trackNewsletterSignup({ user, newsletterId, newsletterName, platform }) {
-  return record({ user, entityType: ENTITY.NEWSLETTER, entityId: newsletterId, entityName: newsletterName, actionType: ACTION.NEWSLETTER_SUBSCRIBED, platform });
-}
-
-// --- Reads ---
-
-export function allUsers() { return [...users]; }
-export function allEvents() { return [...events]; }
-export function userById(id) { return users.find((u) => u.id === id) || null; }
-export function eventsForUser(userId) {
-  return events
-    .filter((e) => e.userId === userId)
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-}
-
-// --- Analytics ---
-
-export function totalFans() { return users.length; }
-
-export function newFansThisWeek() {
-  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  return users.filter((u) => new Date(u.createdAt).getTime() >= cutoff).length;
-}
-
-export function countByAction(action) {
-  return events.filter((e) => e.actionType === action).length;
-}
-
-export function musicLinkClicks() { return countByAction(ACTION.MUSIC_LINK_CLICKED); }
-export function storySaves() { return countByAction(ACTION.STORY_SAVED); }
-export function storyViews() { return countByAction(ACTION.STORY_VIEWED); }
-export function waitlistSignups() { return countByAction(ACTION.DROP_WAITLIST_JOINED); }
-export function newsletterSubscribers() { return countByAction(ACTION.NEWSLETTER_SUBSCRIBED); }
-
-export function topCityPercentages() {
-  const counts = {};
-  for (const u of users) counts[u.city] = (counts[u.city] || 0) + 1;
-  const total = users.length || 1;
-  return Object.entries(counts)
-    .map(([city, n]) => ({ city, pct: (n / total) * 100, count: n }))
-    .sort((a, b) => b.pct - a.pct);
-}
-
-export function mostEngagedUsers() {
-  const counts = {};
-  for (const e of events) counts[e.userId] = (counts[e.userId] || 0) + 1;
-  return Object.entries(counts)
-    .map(([userId, count]) => ({ user: userById(userId), count }))
-    .filter((row) => row.user)
-    .sort((a, b) => b.count - a.count);
-}
-
-function topByAction(action) {
-  const counts = {};
-  for (const e of events.filter((ev) => ev.actionType === action)) {
-    counts[e.entityName] = (counts[e.entityName] || 0) + 1;
-  }
-  return Object.entries(counts)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
-}
-
-export function topStoriesRead() { return topByAction(ACTION.STORY_VIEWED); }
-export function topSongsClicked() { return topByAction(ACTION.MUSIC_LINK_CLICKED); }
-export function topCreatorsFollowed() { return topByAction(ACTION.CREATOR_FOLLOWED); }
-export function topBrandsFollowed() { return topByAction(ACTION.BRAND_FOLLOWED); }
+export { COLLECTIONS };

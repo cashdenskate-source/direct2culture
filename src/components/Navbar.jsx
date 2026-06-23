@@ -12,6 +12,8 @@ const links = [
   { to: '/tell-your-story', label: 'Tell Your Story' },
   { to: '/newsletter', label: 'The Culture Brief' },
   // Mobile-menu + footer only
+  { to: '/identity-graph', label: 'Identity Graph' },
+  { to: '/today', label: 'Today\'s Law' },
   { to: '/magazine', label: 'Magazine' },
   { to: '/food', label: 'Food' },
   { to: '/afterdrama', label: 'AfterDrama' },
