@@ -1,18 +1,23 @@
 import { useEffect, useRef } from 'react';
 import createGlobe from 'cobe';
 
-export default function CultureGlobe({ markers = [], size = 600 }) {
+export default function CultureGlobe({ markers = [], size = 720 }) {
   const canvasRef = useRef(null);
+  const markersRef = useRef(markers);
+  const phi = useRef(0);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
-  const phi = useRef(0);
   const widthRef = useRef(0);
 
+  // Keep markers ref fresh without re-creating the globe
+  useEffect(() => { markersRef.current = markers; }, [markers]);
+
+  // Create the globe ONCE on mount. Markers update via ref inside onRender.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    widthRef.current = canvas.offsetWidth || 600;
 
-    widthRef.current = canvas.offsetWidth;
     const ro = new ResizeObserver(() => {
       if (canvas) widthRef.current = canvas.offsetWidth;
     });
@@ -25,25 +30,25 @@ export default function CultureGlobe({ markers = [], size = 600 }) {
       phi: 0,
       theta: 0.3,
       dark: 1,
-      diffuse: 3,
+      diffuse: 1.2,
       mapSamples: 16000,
-      mapBrightness: 1.2,
-      baseColor: [1, 1, 1],
-      markerColor: [0.95, 0.95, 0.95],
+      mapBrightness: 6,
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [1, 1, 1],
       glowColor: [1, 1, 1],
-      markers,
+      markers: markersRef.current,
       onRender: (state) => {
         if (!pointerInteracting.current) phi.current += 0.004;
         state.phi = phi.current + pointerInteractionMovement.current;
         state.width = widthRef.current * 2;
         state.height = widthRef.current * 2;
+        state.markers = markersRef.current; // live update without recreate
       },
     });
 
-    setTimeout(() => { canvas.style.opacity = '1'; }, 100);
+    setTimeout(() => { canvas.style.opacity = '1'; }, 120);
     return () => { globe.destroy(); ro.disconnect(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(markers)]);
+  }, []);
 
   return (
     <div className="relative" style={{ maxWidth: size, aspectRatio: '1', margin: '0 auto', width: '100%' }}>
@@ -54,7 +59,7 @@ export default function CultureGlobe({ markers = [], size = 600 }) {
           height: '100%',
           cursor: 'grab',
           opacity: 0,
-          transition: 'opacity 1s ease',
+          transition: 'opacity 1.2s ease',
           contain: 'layout paint size',
         }}
         onPointerDown={(e) => {

@@ -36,7 +36,7 @@ export default function CultureGlobeSection() {
 
   useEffect(() => {
     const unsubReal = subscribeCultureEvents(addPing);
-    const unsubSim = startSimulatedPings(addPing, 5500);
+    const unsubSim = startSimulatedPings(addPing, 3500);
     return () => {
       unsubReal();
       unsubSim();
@@ -64,7 +64,7 @@ export default function CultureGlobeSection() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 mt-12">
           {/* Globe */}
           <div className="flex items-center justify-center min-h-[400px]">
-            <CultureGlobe markers={pings} size={620} />
+            <CultureGlobe markers={pings} size={720} />
           </div>
 
           {/* Live feed */}
