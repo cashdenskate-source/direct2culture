@@ -37,8 +37,8 @@ export default function Drops() {
         meta={`${drops.length} drops on deck`}
       />
 
-      <section className="border-b border-ink/10 bg-bone">
-        <div className="container-edge py-6 flex flex-wrap gap-2">
+      <section className="sticky top-[60px] z-30 border-b border-ink/10 bg-bone/95 backdrop-blur">
+        <div className="container-edge py-4 flex flex-wrap gap-2 md:py-6">
           {filters.map((c) => (
             <button
               key={c}
