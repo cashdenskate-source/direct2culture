@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
+import AppStoreButton from '../components/AppStoreButton.jsx';
 import SEO from '../components/SEO.jsx';
 import StorySignupForm from '../components/story/StorySignupForm.jsx';
 import { storyBySlug } from '../data/storyData.js';
@@ -259,18 +260,18 @@ function BrandLinks({ brand }) {
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">Get the App</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {apps.map((l) => (
-              <a
-                key={l.label}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackCTA(`story_app_${l.label.toLowerCase().replace(/\s+/g, '_')}`, { ticker: brand.ticker })}
-                className="bg-ink text-bone px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] hover:opacity-90 transition-opacity"
-              >
-                {l.label} ↓
-              </a>
-            ))}
+            <AppStoreButton
+              platform="apple"
+              url={brand.iosAppURL}
+              trackingKey="story_app_apple_app_store"
+              trackingProps={{ ticker: brand.ticker }}
+            />
+            <AppStoreButton
+              platform="google"
+              url={brand.androidAppURL}
+              trackingKey="story_app_google_play"
+              trackingProps={{ ticker: brand.ticker }}
+            />
           </div>
         </div>
       )}
