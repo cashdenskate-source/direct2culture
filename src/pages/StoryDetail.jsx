@@ -109,6 +109,34 @@ export default function StoryDetail() {
         ))}
       </article>
 
+      {/* Instagram feed (live, via brand record) */}
+      {brand?.instagramFeedURL && (
+        <section className="border-t border-ink/10 bg-bone">
+          <div className="container-edge py-16 lg:py-20">
+            <div className="flex items-end justify-between flex-wrap gap-4 border-b border-ink pb-3 mb-6">
+              <div>
+                <p className="eyebrow">Live Feed</p>
+                <h2 className="mt-2 font-sans text-2xl font-black tracking-tight">@{brand.name} on Instagram</h2>
+              </div>
+              {brand.instagramURL && (
+                <a href={brand.instagramURL} target="_blank" rel="noopener noreferrer" className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash hover:text-ink">
+                  View on Instagram →
+                </a>
+              )}
+            </div>
+            <iframe
+              src={brand.instagramFeedURL}
+              className="w-full border border-ink/10"
+              style={{ height: 500 }}
+              scrolling="no"
+              allowTransparency="true"
+              allow="encrypted-media"
+              title={`${brand.name} Instagram feed`}
+            />
+          </div>
+        </section>
+      )}
+
       {/* Signup form */}
       <section className="border-t border-ink/10 bg-ink/[0.03]">
         <div className="container-edge py-16 lg:py-20 max-w-3xl">

@@ -9,6 +9,7 @@ const EMPTY_BRAND = {
   bio: '', followersIG: 0, followersTT: 0, growthPct: 0, trendScore: 0,
   storeURL: '', instagramURL: '', tiktokURL: '', websiteURL: '', shopifyHandle: '',
   iosAppURL: '', androidAppURL: '',
+  instagramFeedURL: '',
   featured: false,
 };
 
@@ -112,6 +113,11 @@ export default function AdminBrands() {
           <Input label="Website URL" v={editing.data.websiteURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, websiteURL: v } }))} />
           <Input label="iOS App Store URL" v={editing.data.iosAppURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, iosAppURL: v } }))} />
           <Input label="Google Play URL" v={editing.data.androidAppURL} on={(v) => setEditing((e) => ({ ...e, data: { ...e.data, androidAppURL: v } }))} />
+          <div>
+            <label className="field-label">Instagram Feed URL (LightWidget iframe src)</label>
+            <input className="field" value={editing.data.instagramFeedURL ?? ''} onChange={(e) => setEditing((s) => ({ ...s, data: { ...s.data, instagramFeedURL: e.target.value } }))} placeholder="https://cdn.lightwidget.com/widgets/XXXXXX.html" />
+            <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.25em] text-ash">Setup at lightwidget.com → connect IG → copy iframe src</p>
+          </div>
           <label className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em]">
             <input type="checkbox" checked={!!editing.data.featured} onChange={(e) => setEditing((s) => ({ ...s, data: { ...s.data, featured: e.target.checked } }))} />
             Direct2Culture Pick (featured)
