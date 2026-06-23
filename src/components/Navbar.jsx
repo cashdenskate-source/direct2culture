@@ -3,31 +3,64 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { signOut } from '../lib/auth.js';
 
-const links = [
-  { to: '/', label: 'Index' },
-  // Top 5 — visible on desktop (slice(1, 6))
+// Desktop top-5 nav (always visible on lg+).
+const topNav = [
   { to: '/stories', label: 'Stories' },
   { to: '/creators', label: 'Creators' },
   { to: '/market', label: 'Market' },
   { to: '/tell-your-story', label: 'Tell Your Story' },
   { to: '/newsletter', label: 'The Culture Brief' },
-  // Mobile-menu + footer only
-  { to: '/identity-graph', label: 'Identity Graph' },
-  { to: '/today', label: 'Today\'s Law' },
-  { to: '/podcast', label: 'Podcast' },
-  { to: '/magazine', label: 'Magazine' },
-  { to: '/food', label: 'Food' },
-  { to: '/afterdrama', label: 'AfterDrama' },
-  { to: '/d2c-pro', label: 'D2C Pro' },
-  { to: '/culture-signals', label: 'Culture Signals' },
-  { to: '/interviews', label: 'Interviews' },
-  { to: '/drops', label: 'Drops' },
-  { to: '/events', label: 'Events' },
-  { to: '/cities', label: 'Cities' },
-  { to: '/pricing', label: 'Get Featured' },
-  { to: '/submit', label: 'Submit' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
+];
+
+// Drawer (☰ Menu) is grouped by category — stacks on mobile, 5-column on desktop.
+const sections = [
+  {
+    title: 'Read',
+    items: [
+      { to: '/stories', label: 'Stories' },
+      { to: '/interviews', label: 'Interviews' },
+      { to: '/culture-signals', label: 'Culture Signals' },
+      { to: '/magazine', label: 'Magazine' },
+      { to: '/today', label: "Today's Law" },
+    ],
+  },
+  {
+    title: 'Tune In',
+    items: [
+      { to: '/podcast', label: 'Podcast' },
+    ],
+  },
+  {
+    title: 'Discover',
+    items: [
+      { to: '/creators', label: 'Creators' },
+      { to: '/drops', label: 'Drops' },
+      { to: '/events', label: 'Events' },
+      { to: '/cities', label: 'Cities' },
+      { to: '/food', label: 'Food' },
+      { to: '/afterdrama', label: 'AfterDrama' },
+      { to: '/market', label: 'Market' },
+      { to: '/identity-graph', label: 'Identity Graph' },
+    ],
+  },
+  {
+    title: 'For Creators',
+    items: [
+      { to: '/tell-your-story', label: 'Tell Your Story' },
+      { to: '/submit', label: 'Submit' },
+      { to: '/pricing', label: 'Get Featured' },
+      { to: '/d2c-pro', label: 'D2C Pro' },
+    ],
+  },
+  {
+    title: 'Direct2Culture',
+    items: [
+      { to: '/', label: 'Index' },
+      { to: '/about', label: 'About' },
+      { to: '/contact', label: 'Contact' },
+      { to: '/newsletter', label: 'The Culture Brief' },
+    ],
+  },
 ];
 
 function initialOf(profile, user) {
@@ -103,7 +136,7 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden lg:flex items-center gap-7">
-          {links.slice(1, 6).map((l) => (
+          {topNav.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
@@ -184,34 +217,45 @@ export default function Navbar() {
 
       {open && (
         <div className="border-t border-ink/10 bg-bone animate-fade-in">
-          <nav className="container-edge flex flex-col py-6 gap-1 lg:grid lg:grid-cols-3 lg:gap-x-10 lg:gap-y-0 lg:py-8">
-            {links.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                className={({ isActive }) =>
-                  `flex items-center justify-between py-3 border-b border-ink/10 font-sans text-2xl font-bold tracking-tighter lg:text-lg lg:py-3 ${
-                    isActive ? 'text-ink' : 'text-ash hover:text-ink'
-                  }`
-                }
-              >
-                <span>{l.label}</span>
-                <span className="font-mono text-[10px] tracking-[0.2em] text-ash">→</span>
-              </NavLink>
-            ))}
+          <div className="container-edge py-6 lg:py-10">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-10">
+              {sections.map((section) => (
+                <div key={section.title}>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash">
+                    {section.title}
+                  </p>
+                  <nav className="mt-4 flex flex-col">
+                    {section.items.map((l) => (
+                      <NavLink
+                        key={l.to}
+                        to={l.to}
+                        className={({ isActive }) =>
+                          `flex items-center justify-between border-b border-ink/10 py-3 font-sans text-2xl font-bold tracking-tighter lg:border-none lg:py-1.5 lg:text-base ${
+                            isActive ? 'text-ink' : 'text-ash hover:text-ink'
+                          }`
+                        }
+                      >
+                        <span>{l.label}</span>
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-ash lg:hidden">→</span>
+                      </NavLink>
+                    ))}
+                  </nav>
+                </div>
+              ))}
+            </div>
 
-            <div className="mt-6 border-t border-ink/10 pt-4">
+            <div className="mt-10 border-t border-ink/10 pt-6">
               {!user ? (
-                <div className="flex flex-col gap-3">
-                  <Link to="/login" className="btn-ghost w-full">Sign In</Link>
-                  <Link to="/signup" className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash text-center">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                  <Link to="/login" className="btn-ghost w-full lg:w-auto">Sign In</Link>
+                  <Link to="/signup" className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash text-center lg:flex-1">
                     No account? Create one →
                   </Link>
-                  <Link to="/submit" className="btn-primary w-full">Submit Your Brand</Link>
+                  <Link to="/submit" className="btn-primary w-full lg:w-auto">Submit Your Brand</Link>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 pb-3 border-b border-ink/10">
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="flex items-center gap-3 pb-3 border-b border-ink/10 lg:border-none lg:pb-0">
                     <span className="flex h-10 w-10 items-center justify-center bg-ink text-bone font-sans text-base font-black">
                       {initialOf(profile, user)}
                     </span>
@@ -220,14 +264,16 @@ export default function Navbar() {
                       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ash truncate">{user.email}</p>
                     </div>
                   </div>
-                  <Link to={dashboardHref} className="btn-primary w-full">{dashboardLabel} →</Link>
-                  <button onClick={onLogout} className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash text-center py-2">
-                    Sign Out
-                  </button>
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-5">
+                    <Link to={dashboardHref} className="btn-primary w-full lg:w-auto">{dashboardLabel} →</Link>
+                    <button onClick={onLogout} className="font-mono text-[11px] uppercase tracking-[0.2em] text-ash text-center py-2 lg:py-0">
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
-          </nav>
+          </div>
         </div>
       )}
     </header>
