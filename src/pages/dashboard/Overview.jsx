@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageShell from '../../components/PageShell.jsx';
 import StatusBadge from '../../components/StatusBadge.jsx';
+import StatTile from '../../components/StatTile.jsx';
 import EmptyState from '../../components/EmptyState.jsx';
 import { listWhere } from '../../lib/firestore.js';
 import { useAuth } from '../../contexts/AuthContext.jsx';
@@ -93,15 +94,6 @@ export default function Overview() {
         <QuickAction to="/dashboard/interview-request" eyebrow="Request" title="Request an interview." />
       </div>
     </PageShell>
-  );
-}
-
-function StatTile({ label, value, accent }) {
-  return (
-    <div className={`border p-5 ${accent ? 'bg-ink text-bone border-ink' : 'border-ink/15 bg-bone'}`}>
-      <p className={`font-mono text-[10px] uppercase tracking-[0.25em] ${accent ? 'text-bone/60' : 'text-ash'}`}>{label}</p>
-      <p className="mt-3 font-sans text-4xl font-black tracking-tightest leading-none">{value}</p>
-    </div>
   );
 }
 
