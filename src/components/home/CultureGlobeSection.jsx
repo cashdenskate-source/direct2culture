@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CultureGlobe from '../globe/CultureGlobe.jsx';
 import { subscribeCultureEvents, startSimulatedPings } from '../../lib/cultureEvents.js';
-import { SEED_CITIES } from '../../lib/cityCoords.js';
+import { SEED_CITIES, lookupCity } from '../../lib/cityCoords.js';
+import { subscribeBrands } from '../../lib/brands.js';
+import { subscribeSongs } from '../../lib/market.js';
+import { creators as CREATORS } from '../../data/creatorData.js';
 
 const MAX_FEED = 12;
 const SEED_POINTS = SEED_CITIES.map((c) => ({
@@ -24,12 +27,76 @@ function pickRandom(arr, exclude) {
   return opts[Math.floor(Math.random() * opts.length)] || arr[0];
 }
 
+// Deterministic jitter per id so badges in the same city spread instead of overlap
+function hashOffset(id) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
+  const angle = (h % 360) * (Math.PI / 180);
+  const radius = 0.7 + ((h >> 8) % 5) * 0.18; // 0.7..1.6 degrees
+  return { dLat: Math.sin(angle) * radius, dLng: Math.cos(angle) * radius };
+}
+
 export default function CultureGlobeSection() {
   const [points, setPoints] = useState(SEED_POINTS);
   const [arcs, setArcs] = useState([]);
   const [feed, setFeed] = useState([]);
   const [totalToday, setTotalToday] = useState(0);
+  const [brands, setBrands] = useState([]);
+  const [songs, setSongs] = useState([]);
   const timers = useRef([]);
+
+  useEffect(() => {
+    const u1 = subscribeBrands(setBrands);
+    const u2 = subscribeSongs(setSongs);
+    return () => { u1(); u2(); };
+  }, []);
+
+  const badges = useMemo(() => {
+    const out = [];
+    // Brands → HQ city
+    for (const b of brands) {
+      const city = lookupCity(b.hq) || lookupCity(b.city);
+      if (!city) continue;
+      const j = hashOffset('brand_' + b.id);
+      out.push({
+        id: 'brand_' + b.id,
+        lat: city.lat + j.dLat, lng: city.lng + j.dLng,
+        name: b.name, short: (b.ticker || b.name || '').slice(0, 5),
+        logo: b.appIconURL || b.logoURL || null,
+        href: `/market/brand/${b.ticker}`,
+      });
+    }
+    // Creators → creator city (only revealed ones; unrevealed stay locked)
+    for (const c of CREATORS) {
+      if (c.isRevealed === false) continue;
+      const city = lookupCity(c.city);
+      if (!city) continue;
+      const j = hashOffset('creator_' + c.id);
+      out.push({
+        id: 'creator_' + c.id,
+        lat: city.lat + j.dLat, lng: city.lng + j.dLng,
+        name: c.name, short: c.name.split(' ').map((p) => p[0]).join('').slice(0, 3),
+        logo: c.imagePlaceholder || null,
+        href: `/creator/${c.slug}`,
+      });
+    }
+    // Top 3 songs → artist city
+    const topSongs = [...songs].sort((a, b) => (b.totalStreams || 0) - (a.totalStreams || 0)).slice(0, 3);
+    for (const s of topSongs) {
+      const city = lookupCity(s.city) || lookupCity('Atlanta');
+      if (!city) continue;
+      const j = hashOffset('song_' + s.id);
+      out.push({
+        id: 'song_' + s.id,
+        lat: city.lat + j.dLat, lng: city.lng + j.dLng,
+        name: `$${s.ticker} · ${s.title}`,
+        short: '$' + (s.ticker || '').slice(0, 4),
+        logo: s.coverURL || null,
+        href: `/market/song/${s.ticker}`,
+      });
+    }
+    return out;
+  }, [brands, songs]);
 
   function addPing(event) {
     if (event.lat == null || event.lng == null) return;
@@ -102,7 +169,7 @@ export default function CultureGlobeSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 mt-12">
           <div className="flex items-center justify-center min-h-[500px]">
-            <CultureGlobe points={points} arcs={arcs} size={720} />
+            <CultureGlobe points={points} arcs={arcs} badges={badges} size={720} />
           </div>
 
           <aside className="space-y-2">

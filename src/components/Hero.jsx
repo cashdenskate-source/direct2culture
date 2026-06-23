@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { trackCTA } from '../lib/tracking.js';
+import Aurora from './Aurora.jsx';
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-ink/10 bg-bone">
-      <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" />
+      <Aurora opacity={0.55} blur={90} />
+      <div className="pointer-events-none absolute inset-0 grid-lines opacity-40" />
 
       <div className="container-edge relative pt-14 pb-16 lg:pt-24 lg:pb-24">
         <div className="flex items-center justify-between">
