@@ -21,6 +21,8 @@ export const ACTION = {
   DROP_WAITLIST_JOINED: 'dropWaitlistJoined',
   NEWSLETTER_SUBSCRIBED: 'newsletterSubscribed',
   PODCAST_LISTENED: 'podcastListened',
+  FILM_WATCHED: 'filmWatched',
+  CONTENT_RATED: 'contentRated',
 };
 
 export const ENTITY = {
@@ -33,6 +35,7 @@ export const ENTITY = {
   DROP: 'drop',
   NEWSLETTER: 'newsletter',
   PODCAST: 'podcast',
+  FILM: 'film',
 };
 
 export const ACTION_LABEL = {
@@ -47,6 +50,8 @@ export const ACTION_LABEL = {
   dropWaitlistJoined: 'Drop waitlist joined',
   newsletterSubscribed: 'Newsletter subscribed',
   podcastListened: 'Podcast played',
+  filmWatched: 'Film watched',
+  contentRated: 'Content rated',
 };
 
 // --- Reads (pure) ---
@@ -177,6 +182,27 @@ export const trackNewsletterSignup = ({ user, newsletterId, newsletterName, plat
 
 export const trackPodcastListen = ({ user, episodeId, episodeName, platform }) =>
   track({ user, entityType: ENTITY.PODCAST, entityId: episodeId, entityName: episodeName, actionType: ACTION.PODCAST_LISTENED, platform });
+
+export const trackFilmWatch = ({ user, filmId, filmName, platform }) =>
+  track({ user, entityType: ENTITY.FILM, entityId: filmId, entityName: filmName, actionType: ACTION.FILM_WATCHED, platform });
+
+// contentType is passed through so rating events can target any entity (film, story, podcast, …).
+export const trackContentRating = ({ user, contentId, contentName, contentType, rating, platform }) => {
+  if (!user) return Promise.resolve();
+  const payload = {
+    userId: user.id || user.uid,
+    userName: user.name || '',
+    entityType: contentType,
+    entityId: contentId,
+    entityName: contentName,
+    actionType: ACTION.CONTENT_RATED,
+    platform: platform || 'web',
+    city: user.city || '',
+    rating,
+  };
+  trackCTA(`engagement_${ACTION.CONTENT_RATED}`, payload);
+  return recordFanEvent(payload);
+};
 
 // --- Consent ---
 

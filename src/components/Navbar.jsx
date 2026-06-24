@@ -28,6 +28,7 @@ const sections = [
     title: 'Tune In',
     items: [
       { to: '/podcast', label: 'Podcast' },
+      { to: '/films', label: 'Films' },
     ],
   },
   {

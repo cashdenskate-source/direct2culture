@@ -8,7 +8,10 @@ export const COLLECTIONS = {
   EVENTS: 'fan_events',
   CONTACT_REQUESTS: 'fan_contact_requests',
   CONTACT_GRANTS: 'fan_contact_grants',
+  RATINGS: 'fan_ratings',
 };
+
+const ratingDocId = (contentId, userId) => `${contentId}__${userId}`;
 
 export async function fetchFanUsers() {
   if (!hasFirebaseConfig) return [];
@@ -125,4 +128,42 @@ export async function declineContactRequest(requestId) {
   }
   await updateOne(COLLECTIONS.CONTACT_REQUESTS, requestId, { status: 'declined' });
   return { ok: true };
+}
+
+// One rating per (contentId, userId) — composite id keeps it idempotent.
+export async function upsertRating({ contentId, contentType, contentName, userId, userName = '', city = '', rating }) {
+  if (!hasFirebaseConfig || !contentId || !userId) return { ok: false };
+  await setDocById(COLLECTIONS.RATINGS, ratingDocId(contentId, userId), {
+    contentId,
+    contentType,
+    contentName,
+    userId,
+    userName,
+    city,
+    rating,
+    ratedAt: new Date().toISOString(),
+  });
+  return { ok: true };
+}
+
+export async function fetchRatingsForContent(contentId) {
+  if (!hasFirebaseConfig || !contentId) return [];
+  try {
+    return await listWhere(COLLECTIONS.RATINGS, [['contentId', '==', contentId]]);
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchUserRating(contentId, userId) {
+  if (!hasFirebaseConfig || !contentId || !userId) return null;
+  try {
+    const rows = await listWhere(COLLECTIONS.RATINGS, [
+      ['contentId', '==', contentId],
+      ['userId', '==', userId],
+    ]);
+    return rows[0] || null;
+  } catch {
+    return null;
+  }
 }
