@@ -36,6 +36,7 @@ const sections = [
     items: [
       { to: '/creators', label: 'Creators' },
       { to: '/drops', label: 'Drops' },
+      { to: '/fitness', label: 'Fitness' },
       { to: '/events', label: 'Events' },
       { to: '/cities', label: 'Cities' },
       { to: '/food', label: 'Food' },

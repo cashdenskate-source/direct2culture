@@ -35,6 +35,8 @@ import Podcast from './pages/Podcast.jsx';
 import PodcastEpisode from './pages/PodcastEpisode.jsx';
 import Films from './pages/Films.jsx';
 import FilmDetail from './pages/FilmDetail.jsx';
+import Fitness from './pages/Fitness.jsx';
+import FitnessDetail from './pages/FitnessDetail.jsx';
 
 import Login from './pages/auth/Login.jsx';
 import Signup from './pages/auth/Signup.jsx';
@@ -149,6 +151,8 @@ export default function App() {
         <Route path="/podcast/:slug" element={<PublicShell><PodcastEpisode /></PublicShell>} />
         <Route path="/films" element={<PublicShell><Films /></PublicShell>} />
         <Route path="/films/:slug" element={<PublicShell><FilmDetail /></PublicShell>} />
+        <Route path="/fitness" element={<PublicShell><Fitness /></PublicShell>} />
+        <Route path="/fitness/:slug" element={<PublicShell><FitnessDetail /></PublicShell>} />
 
         {/* Culture Stock Exchange (public) */}
         <Route path="/market" element={<PublicShell><Market /></PublicShell>} />
